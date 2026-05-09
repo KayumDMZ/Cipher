@@ -1,0 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* #ffffff */
+    --background-alt: 240 5% 96%; /* #f5f5f7 */
+    --foreground: 0 0% 11%; /* #1d1d1f */
+    --border: 0 0% 86%; /* #d2d2d7 */
+    --apple-blue: 211 100% 50%; /* #0071e3 */
+    --apple-blue-hover: 211 100% 45%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 11%;
+    --radius: 1rem;
+  }
+
+  .dark {
+    --background: 0 0% 0%; /* #000000 */
+    --background-alt: 0 0% 8%; /* #141414 */
+    --foreground: 0 0% 96%; /* #f5f5f7 */
+    --border: 0 0% 26%; /* #424245 */
+    
+    --card: 0 0% 11%; /* #1d1d1f */
+    --card-foreground: 0 0% 96%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    /* Apple uses San Francisco, fallback to Inter and system fonts */
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    overflow-x: clip;
+    line-height: 1.47059;
+    letter-spacing: -0.022em;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+    font-weight: 600;
+    letter-spacing: -0.003em;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-12px); }
+    100% { transform: translateY(0px); }
+  }
+
+  @keyframes slow-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes float-spin {
+    0% { transform: translateY(0px) rotate(-2deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+    100% { transform: translateY(0px) rotate(-2deg); }
+  }
+
+  .animate-float {
+    animation: floating 6s ease-in-out infinite;
+  }
+
+  .animate-spin-slow {
+    animation: slow-spin 20s linear infinite;
+  }
+
+  .animate-float-spin {
+    animation: float-spin 8s ease-in-out infinite;
+  }
+
+  /* ===== APPLE NAV BAR ===== */
+  .apple-nav {
+    background-color: rgba(29, 29, 31, 0.72);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  /* ===== APPLE GLASS DROPDOWN (Shopping Bag etc.) ===== */
+  .apple-glass-dropdown {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(180%) blur(28px);
+    -webkit-backdrop-filter: saturate(180%) blur(28px);
+    border: 1px solid rgba(210, 210, 215, 0.45);
+    border-radius: 18px;
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.04),
+      0 8px 24px rgba(0, 0, 0, 0.10),
+      0 20px 48px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Dark mode variant */
+  .dark .apple-glass-dropdown {
+    background: rgba(30, 30, 32, 0.82);
+    border-color: rgba(80, 80, 88, 0.40);
+  }
+
+  /* ===== TYPOGRAPHY OVERRIDES ===== */
+  .text-headline {
+    font-size: 56px;
+    line-height: 1.07143;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+
+  .text-subheadline {
+    font-size: 28px;
+    line-height: 1.10722;
+    font-weight: 400;
+    letter-spacing: 0.004em;
+  }
+
+  @media (max-width: 768px) {
+    .text-headline {
+      font-size: 40px;
+    }
+    .text-subheadline {
+      font-size: 20px;
+    }
+  }
+
+  /* ===== BUTTON STYLES ===== */
+  .btn-apple {
+    background-color: hsl(var(--apple-blue));
+    color: #ffffff;
+    border-radius: 980px;
+    padding: 8px 16px;
+    font-size: 14px;
+    line-height: 1.14286;
+    font-weight: 400;
+    letter-spacing: -0.016em;
+    transition: background-color 0.2s, transform 0.2s;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-apple:hover {
+    background-color: hsl(var(--apple-blue-hover));
+  }
+
+  .btn-apple-outline {
+    background-color: transparent;
+    color: hsl(var(--apple-blue));
+    border: 1px solid hsl(var(--apple-blue));
+    border-radius: 980px;
+    padding: 7px 15px; /* adjust for border */
+    font-size: 14px;
+    line-height: 1.14286;
+    font-weight: 400;
+    letter-spacing: -0.016em;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-apple-outline:hover {
+    background-color: hsl(var(--apple-blue));
+    color: #ffffff;
+  }
+
+  .btn-link {
+    color: hsl(var(--apple-blue));
+    font-size: 17px;
+    line-height: 1.17648;
+    font-weight: 400;
+    letter-spacing: -0.022em;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .btn-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ===== PRODUCT CARDS ===== */
+  .apple-card {
+    background-color: hsl(var(--card));
+    border-radius: 18px;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.04);
+  }
+
+  .apple-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 10px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  /* ===== BENTO BOX GRID ===== */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .bento-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .bento-item {
+    background-color: hsl(var(--background-alt));
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* ===== RIBBON BADGES ===== */
+  .ribbon-apple {
+    color: #bf4800; /* Apple's "New" text color */
+    font-size: 12px;
+    line-height: 1.33337;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  /* ===== FOCUS STATES ===== */
+  :focus-visible {
+    outline: 2px solid hsl(var(--apple-blue));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}

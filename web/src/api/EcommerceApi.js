@@ -1,0 +1,677 @@
+import { supabase } from '../supabaseClient.js';
+
+const currencyInfo = {
+  currency_code: 'BDT',
+  currency_symbol: '৳',
+};
+
+export const products = [
+  // ── APPLE ──────────────────────────────────────────────────────────────────
+  {
+    id: 'iphone-17-pro',
+    brand: 'apple',
+    category: 'phone',
+    title: 'iPhone 17 Pro',
+    subtitle: 'A19 Pro chip. Pro camera system.',
+    description: 'iPhone 17 Pro features the A19 Pro chip, a breakthrough Pro Fusion camera system with all 48MP lenses, the longest zoom ever on iPhone, and the new Center Stage front camera.',
+    image: '/products/iphone-17-pro.png',
+    gsmArenaId: '', // Disabled for speculative model
+    ribbon_text: 'New',
+    specs: [
+      { label: 'Brand', value: 'Apple' },
+      { label: 'Network', value: 'GSM / CDMA / HSPA / EVDO / LTE / 5G' },
+      { label: 'Body', value: '150.0 × 71.9 × 8.75 mm | 206 g | Aluminum chassis, Ceramic Shield back, IP68' },
+      { label: 'Display', value: '6.3-inch Super Retina XDR OLED | 2622 × 1206 px (460 ppi) | ProMotion 1–120Hz | Always-On | 3000 nits peak' },
+      { label: 'Platform', value: 'OS: iOS 19 | Chipset: Apple A19 Pro (3 nm) | CPU: 6-core | GPU: 6-core | Neural Engine: 16-core' },
+      { label: 'Memory', value: '128GB/12GB RAM, 256GB/12GB RAM, 512GB/12GB RAM (UFS)' },
+      { label: 'Main Camera', value: 'Triple 48MP: Wide f/1.78 + Ultra Wide f/2.2 + Telephoto f/2.8 | 8× optical-quality zoom | 4K@120fps' },
+      { label: 'Selfie Camera', value: '24MP TrueDepth f/1.9 | 4K video | Center Stage' },
+      { label: 'Battery', value: '3,988 mAh | Up to 33 hrs video | MagSafe 30W | USB-C fast charge 50% in 20 min' },
+      { label: 'Connectivity', value: 'Wi-Fi 7, Bluetooth 5.3, Ultra Wideband, NFC, USB-C 3.2, Satellite Emergency SOS' },
+      { label: 'Colors', value: 'Dark Blue Titanium, Silver, Space Black' },
+    ],
+    colors: ['Dark Blue Titanium', 'Silver', 'Space Black'],
+    colorImages: {
+      'Dark Blue Titanium': '/products/iphone-17-pro.png',
+      'Silver': '/products/iphone-17-pro.png',
+      'Space Black': '/products/iphone-17-pro.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/iphone-17-pro.png' },
+    ],
+    variants: [
+      { id: 'ip17p-256', title: '256GB', storage: '256GB', price_in_cents: 19700000, price_formatted: '৳1,97,000', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 20, manage_inventory: true },
+      { id: 'ip17p-512', title: '512GB', storage: '512GB', price_in_cents: 23600000, price_formatted: '৳2,36,000', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 15, manage_inventory: true },
+      { id: 'ip17p-1tb', title: '1TB',   storage: '1TB',   price_in_cents: 26700000, price_formatted: '৳2,67,000', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 10, manage_inventory: true },
+    ],
+  },
+  {
+    id: 'iphone-16-pro',
+    brand: 'apple',
+    category: 'phone',
+    title: 'iPhone 16 Pro',
+    subtitle: 'Hello, Apple Intelligence.',
+    description: 'The most advanced iPhone ever. With the A18 Pro chip, a 48MP Fusion Camera system, and the stunning new titanium design.',
+    image: '/products/iphone-16-pro.png',
+    gsmArenaId: '13315',
+    ribbon_text: '',
+    specs: [
+      { label: 'Brand', value: 'Apple' },
+      { label: 'Network', value: 'GSM / CDMA / HSPA / EVDO / LTE / 5G' },
+      { label: 'Body', value: '149.6 × 71.5 × 8.25 mm | 199 g | Titanium frame, Ceramic Shield front, Textured matte glass back | IP68' },
+      { label: 'Display', value: '6.3-inch Super Retina XDR OLED | 2622 × 1206 px (460 ppi) | ProMotion 1–120Hz | Always-On | 2000 nits peak outdoor' },
+      { label: 'Platform', value: 'OS: iOS 18 | Chipset: Apple A18 Pro (3 nm) | CPU: 6-core | GPU: 6-core | Neural Engine: 16-core' },
+      { label: 'Memory', value: '128GB/8GB RAM, 256GB/8GB RAM, 512GB/8GB RAM, 1TB/8GB RAM' },
+      { label: 'Main Camera', value: '48MP Wide f/1.78 + 48MP Ultra Wide f/2.2 + 12MP 5× Telephoto f/2.8 | 4K@120fps ProRes | Camera Control' },
+      { label: 'Selfie Camera', value: '12MP TrueDepth f/1.9 | 4K video | Face ID' },
+      { label: 'Battery', value: '~3582 mAh | Up to 27 hrs video | MagSafe 25W | Qi2 15W | Fast charge 50% in 30 min' },
+      { label: 'Connectivity', value: 'Wi-Fi 6E, Bluetooth 5.3, UWB, NFC, USB-C 3.2, Satellite Emergency SOS' },
+      { label: 'Colors', value: 'Black Titanium, White Titanium, Natural Titanium, Desert Titanium' },
+    ],
+    colors: ['Black Titanium', 'White Titanium', 'Natural Titanium', 'Desert Titanium'],
+    colorImages: {
+      'Black Titanium': '/products/iphone-16-pro.png',
+      'White Titanium': '/products/iphone-16-pro.png',
+      'Natural Titanium': '/products/iphone-16-pro.png',
+      'Desert Titanium': '/products/iphone-16-pro.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/iphone-16-pro.png' },
+    ],
+    variants: [
+      { id: 'ip16p-128', title: '128GB', storage: '128GB', price_in_cents: 10989000, price_formatted: '৳1,09,890', sale_price_in_cents: 9889000,  sale_price_formatted: '৳98,890',     currency_info: currencyInfo, inventory_quantity: 20, manage_inventory: true },
+      { id: 'ip16p-256', title: '256GB', storage: '256GB', price_in_cents: 12290000, price_formatted: '৳1,22,900', sale_price_in_cents: 10990000, sale_price_formatted: '৳1,09,900', currency_info: currencyInfo, inventory_quantity: 15, manage_inventory: true },
+      { id: 'ip16p-512', title: '512GB', storage: '512GB', price_in_cents: 14490000, price_formatted: '৳1,44,900', sale_price_in_cents: 13290000, sale_price_formatted: '৳1,32,900', currency_info: currencyInfo, inventory_quantity: 10, manage_inventory: true },
+      { id: 'ip16p-1tb', title: '1TB',   storage: '1TB',   price_in_cents: 16990000, price_formatted: '৳1,69,900', sale_price_in_cents: 15490000, sale_price_formatted: '৳1,54,900', currency_info: currencyInfo, inventory_quantity: 6,  manage_inventory: true },
+    ],
+  },
+  {
+    id: 'macbook-pro-m5',
+    brand: 'apple',
+    category: 'laptop',
+    title: 'MacBook Pro 14"',
+    subtitle: 'M5 chip. Supercharged for pros.',
+    description: 'The MacBook Pro with M5 chip delivers extraordinary performance with the longest battery life ever in a Mac. Built for the most demanding workflows.',
+    image: '/products/macbook-pro.png',
+    ribbon_text: 'New',
+    specs: [
+      { label: 'Brand', value: 'Apple' },
+      { label: 'Model', value: 'MacBook Pro 14-inch (2026)' },
+      { label: 'Display', value: '14.2-inch Liquid Retina XDR (Mini-LED) | 3024 × 1964 px (254 ppi) | ProMotion 10–120Hz | 1600 nits peak HDR | 1000 nits SDR' },
+      { label: 'Platform', value: 'macOS Sequoia | Apple M5 chip | 10-core CPU (4P+6E) | 14-core GPU | 16-core Neural Engine' },
+      { label: 'Memory', value: '24GB / 48GB / 96GB Unified Memory | 512GB / 1TB / 2TB / 4TB / 8TB SSD' },
+      { label: 'Battery', value: '72.4 Wh | Up to 24 hours video playback | 140W USB-C fast charge' },
+      { label: 'Connectivity', value: 'Wi-Fi 7 | Bluetooth 6 | 3× Thunderbolt 5 | HDMI 2.1 | SD card reader | MagSafe 3 | 3.5mm headphone jack' },
+      { label: 'Dimensions', value: '312.6 × 221.2 × 15.5 mm | 1.62 kg' },
+      { label: 'Colors', value: 'Silver, Space Black' },
+    ],
+    colors: ['Silver', 'Space Black'],
+    colorImages: {
+      'Silver': '/products/macbook-pro.png',
+      'Space Black': '/products/macbook-pro.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/macbook-pro.png' },
+      { url: '/products/macbook-pro.png' },
+    ],
+    variants: [
+      { id: 'mbp14-m5-512',  title: 'M5 / 24GB / 512GB',     storage: 'M5 / 24GB / 512GB',     price_in_cents: 19789000, price_formatted: '৳1,97,890', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 8, manage_inventory: true },
+      { id: 'mbp14-m5-1tb',  title: 'M5 / 24GB / 1TB',       storage: 'M5 / 24GB / 1TB',       price_in_cents: 21990000, price_formatted: '৳2,19,900', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 6, manage_inventory: true },
+      { id: 'mbp14-m5p-512', title: 'M5 Pro / 24GB / 512GB', storage: 'M5 Pro / 24GB / 512GB', price_in_cents: 24990000, price_formatted: '৳2,49,900', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 5, manage_inventory: true },
+      { id: 'mbp14-m5p-1tb', title: 'M5 Pro / 24GB / 1TB',   storage: 'M5 Pro / 24GB / 1TB',   price_in_cents: 27990000, price_formatted: '৳2,79,900', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 4, manage_inventory: true },
+    ],
+  },
+  {
+    id: 'ipad-pro-m4',
+    brand: 'apple',
+    category: 'tablet',
+    title: 'iPad Pro M4',
+    subtitle: 'Thin. So thin. Powerful. So powerful.',
+    description: 'The new iPad Pro with the M4 chip delivers another giant leap in performance. Featuring an Ultra Retina XDR OLED display.',
+    image: '/products/ipad-pro-m4.png',
+    gsmArenaId: '12987',
+    ribbon_text: '',
+    specs: [
+      { label: 'Brand', value: 'Apple' },
+      { label: 'Display', value: '13-inch Ultra Retina XDR Tandem OLED | 2752 × 2064 px (264 ppi) | ProMotion 10–120Hz | 1600 nits peak HDR' },
+      { label: 'Platform', value: 'iPadOS 18 | Apple M4 chip | 10-core CPU | 10-core GPU | 16-core Neural Engine' },
+      { label: 'Memory', value: '256GB/8GB RAM, 512GB/8GB RAM, 1TB/16GB RAM, 2TB/16GB RAM' },
+      { label: 'Dimensions', value: '281.6 × 215.5 × 5.1 mm | 579 g (Wi-Fi)' },
+      { label: 'Main Camera', value: '12MP Wide f/1.8 | 4K video | LiDAR Scanner | True Tone Flash' },
+      { label: 'Selfie Camera', value: '12MP Ultra Wide landscape f/2.4 | Center Stage' },
+      { label: 'Battery', value: '38.99 Wh | Up to 10 hrs Wi-Fi browsing | USB-C charging' },
+      { label: 'Connectivity', value: 'Wi-Fi 6E | Bluetooth 5.3 | USB-C 4 / Thunderbolt 4 | 5G optional | Apple Pencil Pro support' },
+      { label: 'Colors', value: 'Space Black, Silver' },
+    ],
+    colors: ['Space Black', 'Silver'],
+    colorImages: {
+      'Space Black': '/products/ipad-pro-m4.png',
+      'Silver': '/products/ipad-pro-m4.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/ipad-pro-m4.png' },
+      { url: '/products/ipad-pro-m4.png' },
+    ],
+    variants: [
+      { id: 'ipad-pro-256', title: '256GB Wi-Fi', storage: '256GB Wi-Fi', price_in_cents: 14289000, price_formatted: '৳1,42,890', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 12, manage_inventory: true },
+      { id: 'ipad-pro-512', title: '512GB Wi-Fi', storage: '512GB Wi-Fi', price_in_cents: 16490000, price_formatted: '৳1,64,900', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 10, manage_inventory: true },
+      { id: 'ipad-pro-1tb', title: '1TB Wi-Fi',   storage: '1TB Wi-Fi',   price_in_cents: 20490000, price_formatted: '৳2,04,900', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 8,  manage_inventory: true },
+      { id: 'ipad-pro-2tb', title: '2TB Wi-Fi',   storage: '2TB Wi-Fi',   price_in_cents: 24490000, price_formatted: '৳2,44,900', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 5,  manage_inventory: true },
+    ],
+  },
+  {
+    id: 'apple-watch-ultra-3',
+    brand: 'apple',
+    category: 'watch',
+    title: 'Apple Watch Ultra 3',
+    subtitle: 'Adventure awaits.',
+    description: 'The most capable Apple Watch ever. Apple Watch Ultra 3 pushes the limits of exploration with the most powerful GPS, brightest display, and longest battery life.',
+    image: '/products/watch-ultra.png',
+    gsmArenaId: '12560',
+    ribbon_text: 'New',
+    specs: [
+      { label: 'Brand', value: 'Apple' },
+      { label: 'Model', value: 'Apple Watch Ultra 3 (49mm)' },
+      { label: 'Display', value: '49mm LTPO3 OLED Retina | 3000 nits peak | Always-On | Largest ever on Apple Watch' },
+      { label: 'Platform', value: 'watchOS 12 | Apple S10 SiP | 4-core Neural Engine | 64GB storage' },
+      { label: 'Health Sensors', value: 'ECG + electrical heart sensor | 3rd-gen optical heart sensor | Blood oxygen | Temperature | Depth gauge | Water temperature' },
+      { label: 'Health Features', value: 'Hypertension notifications | Sleep score | Sleep apnea detection | Crash Detection | Fall Detection' },
+      { label: 'Battery', value: 'Up to 42 hrs standard | Up to 72 hrs Low Power Mode | Fast charge: 12 hrs in 15 min' },
+      { label: 'Connectivity', value: '5G Cellular | Wi-Fi 6 | Bluetooth 5.3 | NFC | Satellite Emergency SOS | Ultra Wideband' },
+      { label: 'Durability', value: '100m water resistance (ISO 22810:2010) | Dive up to 40m | MIL-STD-810H | Titanium case' },
+      { label: 'Colors', value: 'Natural Titanium, Black Titanium' },
+    ],
+    colors: ['Natural Titanium', 'Black Titanium'],
+    colorImages: {
+      'Natural Titanium': '/products/watch-ultra.png',
+      'Black Titanium': '/products/watch-ultra.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/watch-ultra.png' },
+      { url: '/products/watch-ultra.png' },
+    ],
+    variants: [
+      { id: 'watch-u3-alpine', title: 'Alpine Loop',  storage: 'Alpine Loop',  price_in_cents: 10989000, price_formatted: '৳1,09,890', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 10, manage_inventory: true },
+      { id: 'watch-u3-trail',  title: 'Trail Loop',   storage: 'Trail Loop',   price_in_cents: 10989000, price_formatted: '৳1,09,890', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 10, manage_inventory: true },
+      { id: 'watch-u3-ocean',  title: 'Ocean Band',   storage: 'Ocean Band',   price_in_cents: 11490000, price_formatted: '৳1,14,900', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 8,  manage_inventory: true },
+    ],
+  },
+  {
+    id: 'samsung-galaxy-s26-ultra',
+    brand: 'samsung',
+    category: 'phone',
+    title: 'Galaxy S26 Ultra',
+    subtitle: 'Galaxy AI. The future is here.',
+    description: 'The absolute pinnacle of mobile engineering. Galaxy S26 Ultra features the Snapdragon 9 Elite, a revolutionary 200MP under-display camera system, and the most advanced Galaxy AI suite ever created.',
+    image: '/products/s26-ultra.png',
+    gsmArenaId: '12771',
+    ribbon_text: 'New',
+    specs: [
+      { label: 'Brand', value: 'Samsung' },
+      { label: 'Network', value: 'GSM / CDMA / HSPA / LTE / 5G' },
+      { label: 'Body', value: '162.8 × 77.6 × 8.2 mm | 218 g | Titanium chassis | Gorilla Armor 3 | IP68' },
+      { label: 'Display', value: '6.9-inch Dynamic LTPO AMOLED 3X | 1440 × 3120 px (~498 ppi) | 1-144Hz | HDR10+ | 3000 nits peak' },
+      { label: 'Platform', value: 'OS: Android 16, One UI 8 | Chipset: Snapdragon 9 Elite (2 nm) | CPU: Octa-core | GPU: Adreno 900' },
+      { label: 'Memory', value: '256GB/16GB RAM, 512GB/16GB RAM, 1TB/16GB RAM (UFS 5.0)' },
+      { label: 'Main Camera', value: 'Quad: 200MP Wide f/1.7 + 50MP Ultrawide f/1.9 + 50MP 5× Periscope f/3.4 + 10MP 3× Telephoto f/2.4 | 8K@60fps video' },
+      { label: 'Selfie Camera', value: '12MP Under-Display f/2.2 | 4K video' },
+      { label: 'Battery', value: '5000 mAh | 65W wired | 25W wireless | 10W reverse wireless' },
+      { label: 'Connectivity', value: 'Wi-Fi 7 | Bluetooth 5.5 | NFC | USB-C 4.0 | Satellite Emergency SOS | Built-in S Pen' },
+      { label: 'Colors', value: 'Titanium Black, Titanium Silver, Titanium Blue' },
+    ],
+    colors: ['Titanium Black', 'Titanium Silver', 'Titanium Blue'],
+    colorImages: {
+      'Titanium Black': '/products/s26-ultra.png',
+      'Titanium Silver': '/products/s26-ultra.png',
+      'Titanium Blue': '/products/s26-ultra.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/s26-ultra.png' },
+    ],
+    variants: [
+      { id: 's26u-256', title: '256GB', storage: '256GB', price_in_cents: 12990000, price_formatted: '৳1,29,900', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 15, manage_inventory: true },
+      { id: 's26u-512', title: '512GB', storage: '512GB', price_in_cents: 14490000, price_formatted: '৳1,44,900', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 12, manage_inventory: true },
+      { id: 's26u-1tb', title: '1TB',   storage: '1TB',   price_in_cents: 15990000, price_formatted: '৳1,59,900', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 8,  manage_inventory: true },
+    ],
+  },
+  {
+    id: 'samsung-galaxy-s24-ultra',
+    brand: 'samsung',
+    category: 'phone',
+    title: 'Galaxy S24 Ultra',
+    subtitle: 'Galaxy AI is here.',
+    description: 'The most powerful Galaxy ever. With a built-in S Pen, 200MP camera, and Snapdragon 8 Gen 3 processor.',
+    image: '/products/s24-ultra-gen.png',
+    gsmArenaId: '12771',
+    ribbon_text: '',
+    specs: [
+      { label: 'Brand', value: 'Samsung' },
+      { label: 'Network', value: 'GSM / CDMA / HSPA / LTE / 5G' },
+      { label: 'Body', value: '162.3 × 79.0 × 8.6 mm | 232 g | Titanium frame | Gorilla Armor | IP68' },
+      { label: 'Display', value: '6.8-inch Dynamic LTPO AMOLED 2X | 1440 × 3088 px (~505 ppi) | 120Hz | HDR10+ | 2600 nits peak' },
+      { label: 'Platform', value: 'OS: Android 14, One UI 6.1 | Chipset: Snapdragon 8 Gen 3 for Galaxy (4 nm) | GPU: Adreno 750' },
+      { label: 'Memory', value: '256GB/12GB RAM, 512GB/12GB RAM, 1TB/12GB RAM (UFS 4.0)' },
+      { label: 'Main Camera', value: 'Quad: 200MP Wide f/1.7 + 12MP Ultrawide f/2.2 + 50MP 5× Periscope f/3.4 + 10MP 3× Telephoto f/2.4 | 8K video' },
+      { label: 'Selfie Camera', value: '12MP f/2.2 | 4K video' },
+      { label: 'Battery', value: '5000 mAh | 45W wired | 15W wireless | 4.5W reverse wireless' },
+      { label: 'Connectivity', value: 'Wi-Fi 6E | Bluetooth 5.3 | NFC | USB-C 3.2 | Built-in S Pen' },
+      { label: 'Colors', value: 'Titanium Black, Titanium Gray, Titanium Violet, Titanium Yellow' },
+    ],
+    colors: ['Titanium Black', 'Titanium Gray', 'Titanium Violet', 'Titanium Yellow'],
+    colorImages: {
+      'Titanium Black': '/products/s24-ultra-gen.png',
+      'Titanium Gray': '/products/s24-ultra-gen.png',
+      'Titanium Violet': '/products/s24-ultra-gen.png',
+      'Titanium Yellow': '/products/s24-ultra-gen.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/s24-ultra-gen.png' },
+      { url: '/products/s24-ultra-gen.png' },
+    ],
+    variants: [
+      { id: 's24u-256', title: '256GB', storage: '256GB', price_in_cents: 12299000, price_formatted: '৳1,22,990', sale_price_in_cents: 10999000, sale_price_formatted: '৳1,09,990', currency_info: currencyInfo, inventory_quantity: 20, manage_inventory: true },
+      { id: 's24u-512', title: '512GB', storage: '512GB', price_in_cents: 13799000, price_formatted: '৳1,37,990', sale_price_in_cents: 12499000, sale_price_formatted: '৳1,24,990', currency_info: currencyInfo, inventory_quantity: 15, manage_inventory: true },
+      { id: 's24u-1tb', title: '1TB',   storage: '1TB',   price_in_cents: 16299000, price_formatted: '৳1,62,990', sale_price_in_cents: 14999000, sale_price_formatted: '৳1,49,990', currency_info: currencyInfo, inventory_quantity: 10, manage_inventory: true },
+    ],
+  },
+  {
+    id: 'samsung-galaxy-z-fold7',
+    brand: 'samsung',
+    category: 'phone',
+    title: 'Galaxy Z Fold7',
+    subtitle: 'Unfold the future.',
+    description: 'The thinnest Galaxy Z Fold ever. Galaxy Z Fold7 features a stunning 8.0-inch foldable inner display, next-generation Galaxy AI, and the power of Snapdragon 8 Elite — all in the most refined fold design yet.',
+    image: '/products/z-fold.png',
+    gsmArenaId: '13147',
+    ribbon_text: 'New',
+    specs: [
+      { label: 'Brand', value: 'Samsung' },
+      { label: 'Network', value: 'GSM / HSPA / LTE / 5G' },
+      { label: 'Body', value: 'Unfolded: ~155 × 132 × 5.0 mm | ~215 g | Armor Aluminum frame | IP48' },
+      { label: 'Display', value: 'Main: 8.0-inch Dynamic LTPO AMOLED 2X | 2208 × 1968 px | 120Hz | Cover: 6.5-inch 2520 × 1080 px | 120Hz' },
+      { label: 'Platform', value: 'OS: Android 16, One UI 8 | Chipset: Snapdragon 8 Elite for Galaxy (3 nm) | GPU: Adreno 830' },
+      { label: 'Memory', value: '256GB/12GB RAM, 512GB/12GB RAM, 1TB/12GB RAM (UFS 4.0)' },
+      { label: 'Main Camera', value: 'Triple: 200MP Wide f/1.7 + 12MP Ultrawide f/2.2 + 10MP 3× Telephoto f/2.4 | 8K video' },
+      { label: 'Selfie Camera', value: 'Cover: 12MP f/2.2 | Under-display: 4MP f/1.8' },
+      { label: 'Battery', value: '4400 mAh | 25W wired | 15W wireless | 4.5W reverse wireless' },
+      { label: 'Connectivity', value: 'Wi-Fi 7 | Bluetooth 5.4 | NFC | USB-C 3.2 | S Pen compatible' },
+      { label: 'Colors', value: 'Silver Shadow, Pink, Navy' },
+    ],
+    colors: ['Silver Shadow', 'Pink', 'Navy'],
+    colorImages: {
+      'Silver Shadow': '/products/z-fold.png',
+      'Pink': '/products/z-fold.png',
+      'Navy': '/products/z-fold.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/z-fold.png' },
+      { url: '/products/z-fold.png' },
+      { url: '/products/z-fold.png' },
+    ],
+    variants: [
+      { id: 'zf7-256', title: '256GB', storage: '256GB', price_in_cents: 21999000, price_formatted: '৳2,19,990', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 8, manage_inventory: true },
+      { id: 'zf7-512', title: '512GB', storage: '512GB', price_in_cents: 23999000, price_formatted: '৳2,39,990', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 6, manage_inventory: true },
+      { id: 'zf7-1tb', title: '1TB',   storage: '1TB',   price_in_cents: 26999000, price_formatted: '৳2,69,990', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 4, manage_inventory: true },
+    ],
+  },
+  {
+    id: 'samsung-galaxy-z-fold6',
+    brand: 'samsung',
+    category: 'phone',
+    title: 'Galaxy Z Fold6',
+    subtitle: 'Unfold a whole new world.',
+    description: 'The ultimate foldable phone. Galaxy Z Fold6 features a 7.6" foldable inner display and the power of Galaxy AI.',
+    image: '/products/samsung-z-fold-6.png',
+    gsmArenaId: '13147',
+    ribbon_text: '',
+    specs: [
+      { label: 'Brand', value: 'Samsung' },
+      { label: 'Network', value: 'GSM / HSPA / LTE / 5G' },
+      { label: 'Body', value: 'Unfolded: 153.5 × 132.6 × 5.6 mm | Folded: 153.5 × 68.1 × 12.1 mm | 239 g | Armor Aluminum | IP48' },
+      { label: 'Display', value: 'Main: 7.6-inch Dynamic LTPO AMOLED 2X | 2160 × 1856 px | 120Hz | 2600 nits | Cover: 6.3-inch 968 × 2376 px | 120Hz' },
+      { label: 'Platform', value: 'OS: Android 14, One UI 6.1 | Chipset: Snapdragon 8 Gen 3 for Galaxy (4 nm) | GPU: Adreno 750' },
+      { label: 'Memory', value: '256GB/12GB RAM, 512GB/12GB RAM, 1TB/12GB RAM (UFS 4.0)' },
+      { label: 'Main Camera', value: 'Triple: 50MP Wide f/1.8 + 12MP Ultrawide f/2.2 + 10MP 3× Telephoto f/2.4 | 4K video' },
+      { label: 'Selfie Camera', value: 'Cover: 10MP f/2.2 | Under-display: 4MP f/1.8' },
+      { label: 'Battery', value: '4400 mAh | 25W wired | 15W wireless | 4.5W reverse wireless' },
+      { label: 'Connectivity', value: 'Wi-Fi 6E | Bluetooth 5.3 | NFC | USB-C 3.1 | S Pen compatible' },
+      { label: 'Colors', value: 'Silver Shadow, Pink, Navy' },
+    ],
+    colors: ['Silver Shadow', 'Pink', 'Navy'],
+    colorImages: {
+      'Silver Shadow': '/products/samsung-z-fold-6.png',
+      'Pink': '/products/samsung-z-fold-6.png',
+      'Navy': '/products/samsung-z-fold-6.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/samsung-z-fold-6.png' },
+    ],
+    variants: [
+      { id: 'zf6-256', title: '256GB', storage: '256GB', price_in_cents: 18999000, price_formatted: '৳1,89,990', sale_price_in_cents: 16999000, sale_price_formatted: '৳1,69,990', currency_info: currencyInfo, inventory_quantity: 10, manage_inventory: true },
+      { id: 'zf6-512', title: '512GB', storage: '512GB', price_in_cents: 20999000, price_formatted: '৳2,09,990', sale_price_in_cents: 18999000, sale_price_formatted: '৳1,89,990', currency_info: currencyInfo, inventory_quantity: 8,  manage_inventory: true },
+      { id: 'zf6-1tb', title: '1TB',   storage: '1TB',   price_in_cents: 23999000, price_formatted: '৳2,39,990', sale_price_in_cents: 20999000, sale_price_formatted: '৳2,09,990', currency_info: currencyInfo, inventory_quantity: 5,  manage_inventory: true },
+    ],
+  },
+  {
+    id: 'samsung-galaxy-tab-s10-ultra',
+    brand: 'samsung',
+    category: 'tablet',
+    title: 'Galaxy Tab S10 Ultra',
+    subtitle: 'The ultimate tablet experience.',
+    description: 'Galaxy Tab S10 Ultra features a massive 14.6" Dynamic AMOLED 2X display and Galaxy AI built-in.',
+    image: '/products/tab-s10-ultra.png',
+    gsmArenaId: '13362',
+    ribbon_text: '',
+    colors: ['Moonstone Gray', 'Platinum Silver'],
+    colorImages: {
+      'Moonstone Gray': '/products/tab-s10-ultra.png',
+      'Platinum Silver': '/products/tab-s10-ultra.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/tab-s10-ultra.png' },
+    ],
+    variants: [
+      { id: 'tabs10u-256', title: '256GB / 12GB', storage: '256GB / 12GB', price_in_cents: 13199000, price_formatted: '৳1,31,990', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 10, manage_inventory: true },
+      { id: 'tabs10u-512', title: '512GB / 12GB', storage: '512GB / 12GB', price_in_cents: 14999000, price_formatted: '৳1,49,990', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 8,  manage_inventory: true },
+    ],
+  },
+  {
+    id: 'samsung-galaxy-watch-ultra',
+    brand: 'samsung',
+    category: 'watch',
+    title: 'Galaxy Watch Ultra',
+    subtitle: 'Push your limits.',
+    description: 'The most capable Galaxy Watch. Built for extreme performance, advanced health tracking, and the toughest environments.',
+    image: '/products/samsung-watch-ultra.png',
+    gsmArenaId: '13127',
+    ribbon_text: '',
+    colors: ['Titanium Gray', 'Titanium White', 'Titanium Silver'],
+    colorImages: {
+      'Titanium Gray': '/products/samsung-watch-ultra.png',
+      'Titanium White': '/products/samsung-watch-ultra.png',
+      'Titanium Silver': '/products/samsung-watch-ultra.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/samsung-watch-ultra.png' },
+    ],
+    variants: [
+      { id: 'gwu-gray',   title: 'Titanium Gray',   storage: 'Titanium Gray',   price_in_cents: 7149000, price_formatted: '৳71,490', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 20, manage_inventory: true },
+      { id: 'gwu-white',  title: 'Titanium White',  storage: 'Titanium White',  price_in_cents: 7149000, price_formatted: '৳71,490', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 20, manage_inventory: true },
+      { id: 'gwu-silver', title: 'Titanium Silver', storage: 'Titanium Silver', price_in_cents: 7149000, price_formatted: '৳71,490', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 15, manage_inventory: true },
+    ],
+  },
+
+  // ── GOOGLE ─────────────────────────────────────────────────────────────────
+  {
+    id: 'google-pixel-9-pro',
+    brand: 'google',
+    category: 'phone',
+    title: 'Pixel 9 Pro',
+    subtitle: 'Google AI. Now in your hands.',
+    description: 'Pixel 9 Pro is Google\'s most powerful phone. Featuring the Tensor G4 chip and a triple rear camera system.',
+    image: '/products/pixel-9-pro.png',
+    gsmArenaId: '13218',
+    ribbon_text: '',
+    specs: [
+      { label: 'Brand', value: 'Google' },
+      { label: 'Network', value: 'GSM / HSPA / LTE / 5G' },
+      { label: 'Body', value: '152.8 × 72.0 × 8.5 mm | 199 g | Polished aluminum frame | Gorilla Glass Victus 2 front and back | IP68' },
+      { label: 'Display', value: '6.3-inch Super Actua LTPO OLED | 1280 × 2856 px (495 ppi) | 1–120Hz | HDR | 3000 nits peak | Gorilla Glass Victus 2' },
+      { label: 'Platform', value: 'OS: Android 15 | Chipset: Google Tensor G4 | Security: Titan M2 | RAM: 16GB LPDDR5X' },
+      { label: 'Memory', value: '128GB/16GB RAM, 256GB/16GB RAM, 1TB/16GB RAM (UFS 3.1)' },
+      { label: 'Main Camera', value: 'Triple: 50MP Wide f/1.68 + 48MP Ultrawide f/1.7 (Macro) + 48MP 5× Telephoto f/2.8 | 8K@30fps | Super Res Zoom 30×' },
+      { label: 'Selfie Camera', value: '10.5MP f/2.2 | 4K video | Face Unlock' },
+      { label: 'Battery', value: '4700 mAh | 45W wired (55% in 30 min) | Qi wireless | Battery Share' },
+      { label: 'Connectivity', value: 'Wi-Fi 7 | Bluetooth 5.3 | NFC | USB-C 3.2 | UWB | Satellite Emergency SOS' },
+      { label: 'Colors', value: 'Obsidian, Porcelain, Hazel, Rose Quartz' },
+    ],
+    colors: ['Obsidian', 'Porcelain', 'Hazel', 'Rose Quartz'],
+    colorImages: {
+      'Obsidian': '/products/pixel-9-pro.png',
+      'Porcelain': '/products/pixel-9-pro.png',
+      'Hazel': '/products/pixel-9-pro.png',
+      'Rose Quartz': '/products/pixel-9-pro.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/pixel-9-pro.png' },
+    ],
+    variants: [
+      { id: 'p9p-128', title: '128GB', storage: '128GB', price_in_cents: 10989000, price_formatted: '৳1,09,890', sale_price_in_cents: 9889000,  sale_price_formatted: '৳98,890',     currency_info: currencyInfo, inventory_quantity: 18, manage_inventory: true },
+      { id: 'p9p-256', title: '256GB', storage: '256GB', price_in_cents: 12490000, price_formatted: '৳1,24,900', sale_price_in_cents: 11290000, sale_price_formatted: '৳1,12,900', currency_info: currencyInfo, inventory_quantity: 14, manage_inventory: true },
+      { id: 'p9p-1tb', title: '1TB',   storage: '1TB',   price_in_cents: 16490000, price_formatted: '৳1,64,900', sale_price_in_cents: 14990000, sale_price_formatted: '৳1,49,900', currency_info: currencyInfo, inventory_quantity: 8,  manage_inventory: true },
+    ],
+  },
+  {
+    id: 'google-pixel-9a',
+    brand: 'google',
+    category: 'phone',
+    title: 'Pixel 9a',
+    subtitle: 'Google AI at a smarter price.',
+    description: 'All the best of Google AI in a more affordable package. Pixel 9a features the Tensor G4 chip and an upgraded 48MP camera.',
+    image: '/products/pixel-9-pro.png',
+    gsmArenaId: '13478',
+    ribbon_text: 'New',
+    specs: [
+      { label: 'Brand', value: 'Google' },
+      { label: 'Network', value: 'GSM / HSPA / LTE / 5G' },
+      { label: 'Body', value: '154.7 × 73.3 × 8.9 mm | 185.9 g | Matte polycarbonate back | Gorilla Glass 3 front | IP68' },
+      { label: 'Display', value: '6.3-inch Actua pOLED | 1080 × 2424 px (422 ppi) | 60–120Hz | HDR | 2700 nits peak' },
+      { label: 'Platform', value: 'OS: Android 15 | Chipset: Google Tensor G4 | Security: Titan M2 | RAM: 8GB LPDDR5X' },
+      { label: 'Memory', value: '128GB/8GB RAM, 256GB/8GB RAM (UFS 3.1)' },
+      { label: 'Main Camera', value: 'Dual: 48MP Wide f/1.7 + 13MP Ultrawide f/2.2 | OIS | 4K@60fps video' },
+      { label: 'Selfie Camera', value: '13MP f/2.2 | 4K video | Face Unlock' },
+      { label: 'Battery', value: '5100 mAh | 23W wired | 7.5W Qi wireless' },
+      { label: 'Connectivity', value: 'Wi-Fi 6E | Bluetooth 5.3 | NFC | USB-C 3.2' },
+      { label: 'Colors', value: 'Obsidian, Porcelain, Peony, Iris' },
+    ],
+    colors: ['Obsidian', 'Porcelain', 'Peony', 'Iris'],
+    colorImages: {
+      'Obsidian': '/products/pixel-9-pro.png',
+      'Porcelain': '/products/pixel-9-pro.png',
+      'Peony': '/products/pixel-9-pro.png',
+      'Iris': '/products/pixel-9-pro.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/pixel-9-pro.png' },
+    ],
+    variants: [
+      { id: 'p9a-128', title: '128GB', storage: '128GB', price_in_cents: 6599000, price_formatted: '৳65,990', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 25, manage_inventory: true },
+      { id: 'p9a-256', title: '256GB', storage: '256GB', price_in_cents: 7499000, price_formatted: '৳74,990', sale_price_in_cents: null, sale_price_formatted: null, currency_info: currencyInfo, inventory_quantity: 20, manage_inventory: true },
+    ],
+  },
+  {
+    id: 'google-pixel-9-pro-fold',
+    brand: 'google',
+    category: 'phone',
+    title: 'Pixel 9 Pro Fold',
+    subtitle: 'An epic display of AI.',
+    description: 'The thinnest foldable with the largest inner display. Experience Google AI on a massive 8-inch screen.',
+    image: '/products/pixel-9-pro.png',
+    gsmArenaId: '13220',
+    ribbon_text: '',
+    colors: ['Obsidian', 'Porcelain'],
+    colorImages: {
+      'Obsidian': '/products/pixel-9-pro.png',
+      'Porcelain': '/products/pixel-9-pro.png',
+    },
+    purchasable: true,
+    images: [
+      { url: '/products/pixel-9-pro.png' },
+    ],
+    variants: [
+      { id: 'p9fold-256', title: '256GB', storage: '256GB', price_in_cents: 17899000, price_formatted: '৳1,78,990', sale_price_in_cents: 15999000, sale_price_formatted: '৳1,59,990', currency_info: currencyInfo, inventory_quantity: 12, manage_inventory: true },
+      { id: 'p9fold-512', title: '512GB', storage: '512GB', price_in_cents: 19999000, price_formatted: '৳1,99,990', sale_price_in_cents: 17999000, sale_price_formatted: '৳1,79,990', currency_info: currencyInfo, inventory_quantity: 8,  manage_inventory: true },
+    ],
+  },
+];
+
+export const formatCurrency = (amountInCents, currencyInfo) => {
+  const symbol = currencyInfo?.currency_symbol || '৳';
+  const amount = amountInCents / 100;
+  return `${symbol}${new Intl.NumberFormat('en-IN').format(Math.round(amount))}`;
+};
+
+export const getProducts = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*, variants:product_variants(*)');
+
+    if (error) throw error;
+    
+    if (data && data.length > 0) {
+      return { products: data.map(p => ({ 
+        ...p, 
+        image: p.image_url, 
+        gsmArenaId: p.gsm_arena_id,
+        variants: p.variants.map(v => ({
+          ...v,
+          currency_info: currencyInfo,
+          price_formatted: formatCurrency(v.price_in_cents, currencyInfo),
+          sale_price_formatted: v.sale_price_in_cents ? formatCurrency(v.sale_price_in_cents, currencyInfo) : null
+        }))
+      })) };
+    }
+  } catch (error) {
+    console.error('Error fetching products from Supabase:', error);
+  }
+  return { products };
+};
+
+export const getProduct = async (id) => {
+  try {
+    const { data: productData, error: productError } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (productError) throw productError;
+
+    if (productData) {
+      const { data: variantsData, error: variantsError } = await supabase
+        .from('product_variants')
+        .select('*')
+        .eq('product_id', id);
+
+      if (variantsError) throw variantsError;
+
+      return { product: {
+        ...productData,
+        image: productData.image_url,
+        gsmArenaId: productData.gsm_arena_id,
+        variants: variantsData.map(v => ({
+          ...v,
+          currency_info: currencyInfo,
+          price_formatted: formatCurrency(v.price_in_cents, currencyInfo),
+          sale_price_formatted: v.sale_price_in_cents ? formatCurrency(v.sale_price_in_cents, currencyInfo) : null
+        }))
+      }};
+    }
+  } catch (error) {
+    console.error(`Error fetching product ${id} from Supabase:`, error);
+  }
+  return { product: products.find(p => p.id === id) };
+};
+
+export const initializeCheckout = async ({ items, successUrl, cancelUrl }) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ url: successUrl });
+    }, 500);
+  });
+};
+
+export const syncCart = async (userId, cartItems) => {
+  try {
+    await supabase.from('cart_items').delete().eq('user_id', userId);
+    if (cartItems.length > 0) {
+      const itemsToInsert = cartItems.map(item => ({
+        user_id: userId,
+        variant_id: item.variant.id,
+        quantity: item.quantity
+      }));
+      const { error } = await supabase.from('cart_items').insert(itemsToInsert);
+      if (error) throw error;
+    }
+    return { success: true };
+  } catch (error) {
+    console.error('Error syncing cart:', error.message);
+    return { success: false, error };
+  }
+};
+
+export const fetchCart = async (userId) => {
+  try {
+    const { data, error } = await supabase
+      .from('cart_items')
+      .select('quantity, variant_id, product_variants (*)')
+      .eq('user_id', userId);
+    if (error) throw error;
+    return { cartItems: data };
+  } catch (error) {
+    console.error('Error fetching cart:', error.message);
+    return { cartItems: [] };
+  }
+};
+
+export const createOrder = async (userId, cartItems, totalAmount, shippingAddress) => {
+  try {
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .insert({
+        user_id: userId,
+        total_amount_in_cents: totalAmount,
+        shipping_address: shippingAddress,
+        status: 'pending'
+      })
+      .select()
+      .single();
+
+    if (orderError) throw orderError;
+
+    const orderItems = cartItems.map(item => ({
+      order_id: order.id,
+      variant_id: item.variant.id,
+      quantity: item.quantity,
+      price_at_purchase_in_cents: item.variant.sale_price_in_cents ?? item.variant.price_in_cents
+    }));
+
+    const { error: itemsError } = await supabase.from('order_items').insert(orderItems);
+    if (itemsError) throw itemsError;
+
+    await supabase.from('cart_items').delete().eq('user_id', userId);
+    return { success: true, orderId: order.id };
+  } catch (error) {
+    console.error('Error creating order:', error.message);
+    return { success: false, error };
+  }
+};
+
+export const getProductQuantities = async ({ fields, product_ids }) => {
+  try {
+    let query = supabase.from('product_variants').select(fields || '*');
+    if (product_ids && product_ids.length > 0) {
+      query = query.in('product_id', product_ids);
+    }
+    const { data, error } = await query;
+    if (error) throw error;
+    return { variants: data };
+  } catch (error) {
+    console.error('Error fetching product quantities:', error);
+    return { variants: [] };
+  }
+};
