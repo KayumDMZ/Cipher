@@ -87,8 +87,8 @@ function Footer() {
         <div className="border-t border-[#d2d2d7] pt-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-[#6e6e73]">
           <p>
             Visit us: <Link to="#" className="text-[#0066cc] underline">Cipher Showroom, Dhaka</Link> or call{' '}
-            <a href="tel:+8801700000000" className="text-[#0066cc] underline">+880 1700-000000</a>. Also available on{' '}
-            <a href="https://wa.me/8801700000000" target="_blank" rel="noreferrer" className="text-[#0066cc] underline">WhatsApp</a>.
+            <span className="text-[#0066cc] underline">+880 1XXX-XXXXXX</span>. Also available on{' '}
+            <span className="text-[#0066cc] underline">WhatsApp</span>.
           </p>
         </div>
 

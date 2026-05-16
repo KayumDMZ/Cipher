@@ -49,33 +49,53 @@ const ProductCard = ({ product, index }) => {
   const cardRef = React.useRef(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
+  const [glintX, setGlintX] = useState(50);
+  const [glintY, setGlintY] = useState(50);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
-    const yPct = (e.clientY - rect.top) / rect.height - 0.5;
-    setRotateX(-yPct * 8);
-    setRotateY(xPct * 8);
+    const xPct = (e.clientX - rect.left) / rect.width;
+    const yPct = (e.clientY - rect.top) / rect.height;
+    setRotateX(-(yPct - 0.5) * 10);
+    setRotateY((xPct - 0.5) * 10);
+    setGlintX(Math.round(xPct * 100));
+    setGlintY(Math.round(yPct * 100));
   };
-  const handleMouseLeave = () => { setRotateX(0); setRotateY(0); };
+  const handleMouseLeave = () => {
+    setRotateX(0);
+    setRotateY(0);
+    setIsHovered(false);
+  };
+  const handleMouseEnter = () => setIsHovered(true);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: index * 0.04 }}
-      style={{ perspective: 1000 }}
+      style={{ perspective: '1000px' }}
     >
       <Link to={`/product/${product.id}`} id={`product-card-${product.id}`} className="block h-full outline-none">
         <motion.div
           ref={cardRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          onMouseEnter={handleMouseEnter}
           animate={{ rotateX, rotateY, transformPerspective: 1000 }}
-          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-          className="apple-card flex flex-col h-full cursor-pointer relative bg-white transform-gpu"
+          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+          className="apple-card flex flex-col h-full cursor-pointer relative bg-white transform-gpu overflow-hidden"
         >
+          {/* Specular glint overlay — follows cursor */}
+          <div
+            className="absolute inset-0 pointer-events-none z-20 transition-opacity duration-300"
+            style={{
+              opacity: isHovered ? 1 : 0,
+              background: `radial-gradient(circle at ${glintX}% ${glintY}%, rgba(255,255,255,0.18) 0%, transparent 65%)`,
+            }}
+          />
+
           {/* Ribbon */}
           {product.ribbon_text && (
             <div className="absolute top-4 left-4 z-10">
@@ -94,17 +114,18 @@ const ProductCard = ({ product, index }) => {
           <div className="relative pt-12 px-8 pb-4 flex-shrink-0 flex items-center justify-center bg-white aspect-[4/3]">
             {!imageLoaded && !imageError && (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-6 h-6 border-2 border-gray-200 border-t-[#0071e3] rounded-full animate-spin" />
+                <div className="skeleton w-full h-full rounded-xl" />
               </div>
             )}
             <motion.img
-              animate={{ scale: rotateX !== 0 || rotateY !== 0 ? 1.05 : 1 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              animate={{ scale: isHovered ? 1.06 : 1 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
               src={imageError ? placeholderImage : (product.image || placeholderImage)}
               alt={product.title}
               onLoad={() => setImageLoaded(true)}
               onError={() => { setImageError(true); setImageLoaded(true); }}
               className={`w-[85%] max-w-[240px] h-auto object-contain mix-blend-multiply transition-opacity duration-500 drop-shadow-xl bg-white ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+              loading="lazy"
             />
           </div>
 
@@ -156,15 +177,22 @@ const ProductsList = () => {
       try {
         setLoading(true);
         const { products: raw } = await getProducts();
-        const { variants: qv } = await getProductQuantities({});
-        const qMap = new Map(qv.map(v => [v.id, v.inventory_quantity]));
-        setProducts(raw.map(p => ({
-          ...p,
-          variants: (p.variants ?? []).map(v => ({
-            ...v,
-            inventory_quantity: qMap.get(v.id) ?? v.inventory_quantity,
-          })),
-        })));
+        
+        // Only fetch quantities if we actually have products
+        if (raw && raw.length > 0) {
+          const productIds = raw.map(p => p.id);
+          const { variants: qv } = await getProductQuantities({ product_ids: productIds });
+          const qMap = new Map((qv || []).map(v => [v.id, v.inventory_quantity]));
+          setProducts(raw.map(p => ({
+            ...p,
+            variants: (p.variants ?? []).map(v => ({
+              ...v,
+              inventory_quantity: qMap.get(v.id) ?? v.inventory_quantity,
+            })),
+          })));
+        } else {
+          setProducts([]);
+        }
       } catch (err) {
         setError(err.message || 'Failed to load products');
       } finally {
@@ -273,7 +301,7 @@ const ProductsList = () => {
             animate={{ opacity: 1 }}
             className="text-center py-24 text-[#6e6e73]"
           >
-            No products in this category.
+            We'll start adding these items once we're rich
           </motion.div>
         ) : (
           <motion.div

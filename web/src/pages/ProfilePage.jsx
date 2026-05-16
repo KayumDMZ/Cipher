@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/supabaseClient';
+import { db } from '@/firebaseConfig';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,6 +21,8 @@ const ProfilePage = () => {
   const [fullName, setFullName] = useState(profile?.full_name || '');
   const [phone, setPhone] = useState(profile?.phone_number || '');
   const [address, setAddress] = useState(profile?.address || '');
+  const [city, setCity] = useState(profile?.city || '');
+  const [zipCode, setZipCode] = useState(profile?.zip_code || '');
 
   useEffect(() => {
     if (user) {
@@ -29,20 +32,20 @@ const ProfilePage = () => {
 
   const fetchOrders = async () => {
     try {
-      const { data, error } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          order_items (
-            *,
-            product_variants (*)
-          )
-        `)
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+      const ordersCol = collection(db, 'orders');
+      const q = query(
+        ordersCol, 
+        where('user_id', '==', user.uid),
+        orderBy('created_at', 'desc')
+      );
+      
+      const querySnapshot = await getDocs(q);
+      const ordersData = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
 
-      if (error) throw error;
-      setOrders(data);
+      setOrders(ordersData);
     } catch (error) {
       console.error('Error fetching orders:', error.message);
     } finally {
@@ -56,7 +59,9 @@ const ProfilePage = () => {
     const { error } = await updateProfile({
       full_name: fullName,
       phone_number: phone,
-      address: address
+      address: address,
+      city: city,
+      zip_code: zipCode
     });
     
     if (error) {
@@ -173,18 +178,43 @@ const ProfilePage = () => {
                           id="phone"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
+                          placeholder=""
                           className="bg-zinc-800/50 border-zinc-700 text-white rounded-xl h-12"
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="address" className="text-zinc-400">Default Shipping Address</Label>
+                        <Label htmlFor="address" className="text-zinc-400">Shipping Address (House, Road, Area)</Label>
                         <textarea 
                           id="address"
                           value={address}
                           onChange={(e) => setAddress(e.target.value)}
-                          className="w-full bg-zinc-800/50 border border-zinc-700 text-white rounded-xl p-4 min-h-[100px] focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                          placeholder=""
+                          className="w-full bg-zinc-800/50 border border-zinc-700 text-white rounded-xl p-4 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                         />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="city" className="text-zinc-400">District / City</Label>
+                          <Input 
+                            id="city"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            placeholder=""
+                            className="bg-zinc-800/50 border-zinc-700 text-white rounded-xl h-12"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="zip" className="text-zinc-400">Postal Code</Label>
+                          <Input 
+                            id="zip"
+                            value={zipCode}
+                            onChange={(e) => setZipCode(e.target.value)}
+                            placeholder=""
+                            className="bg-zinc-800/50 border-zinc-700 text-white rounded-xl h-12"
+                          />
+                        </div>
                       </div>
                     </div>
 
@@ -224,49 +254,57 @@ const SidebarItem = ({ icon, label, active, onClick }) => (
 );
 
 const OrderCard = ({ order }) => (
-  <div className="bg-zinc-800/30 border border-zinc-800 rounded-2xl p-5 hover:border-zinc-700 transition-all group">
-    <div className="flex flex-wrap justify-between items-start gap-4 mb-4">
-      <div>
-        <p className="text-zinc-500 text-xs uppercase tracking-wider font-bold mb-1">Order ID</p>
-        <p className="text-sm font-mono text-zinc-300">#{order.id.slice(0, 8).toUpperCase()}</p>
+  <div className="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 hover:border-zinc-700 transition-all group shadow-sm">
+    <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
+      <div className="flex-1 min-w-[200px]">
+        <div className="flex items-center gap-3 mb-2">
+          <span className={`text-[10px] uppercase tracking-[0.2em] font-black px-2.5 py-1 rounded-md ${
+            order.status === 'delivered' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 
+            order.status === 'cancelled' ? 'bg-red-500/10 text-red-500 border border-red-500/20' :
+            order.status === 'pending' ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20' : 
+            'bg-blue-500/10 text-blue-500 border border-blue-500/20'
+          }`}>
+            {order.status}
+          </span>
+          <span className="text-zinc-600 text-[10px] font-mono tracking-tighter">#{order.id.toUpperCase()}</span>
+        </div>
+        <p className="text-lg font-bold text-white mb-1">{order.items?.length || 0} Products</p>
+        <p className="text-xs text-zinc-500">Placed on {new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
       </div>
+      
       <div className="text-right">
-        <p className="text-zinc-500 text-xs uppercase tracking-wider font-bold mb-1">Date</p>
-        <p className="text-sm text-zinc-300">{new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
-      </div>
-      <div className="text-right">
-        <p className="text-zinc-500 text-xs uppercase tracking-wider font-bold mb-1">Status</p>
-        <span className={`text-[10px] uppercase tracking-widest font-black px-2.5 py-1 rounded-full ${
-          order.status === 'delivered' ? 'bg-green-500/10 text-green-500' : 
-          order.status === 'pending' ? 'bg-amber-500/10 text-amber-500' : 'bg-blue-500/10 text-blue-500'
-        }`}>
-          {order.status}
-        </span>
-      </div>
-      <div className="text-right min-w-[100px]">
-        <p className="text-zinc-500 text-xs uppercase tracking-wider font-bold mb-1">Total</p>
-        <p className="text-lg font-bold text-white">{formatCurrency(order.total_amount_in_cents)}</p>
+        <p className="text-zinc-500 text-[10px] uppercase tracking-widest font-bold mb-1">Order Total</p>
+        <p className="text-2xl font-black text-white">{formatCurrency(order.total_amount_in_cents)}</p>
       </div>
     </div>
     
-    <div className="border-t border-zinc-800/50 pt-4 mt-4 flex items-center justify-between">
-      <div className="flex -space-x-2">
-        {order.order_items.slice(0, 3).map((item, i) => (
-          <div key={i} className="w-10 h-10 rounded-lg bg-zinc-800 border-2 border-black overflow-hidden shadow-md">
-            {/* Ideally we'd have the product image here from the variant/product join */}
-            <div className="w-full h-full flex items-center justify-center text-[10px] text-zinc-500">
-              {item.quantity}x
-            </div>
+    {(order.tracking_number || (order.delivered_at && order.status === 'delivered')) && (
+      <div className="mb-6 p-4 bg-zinc-800/20 rounded-xl border border-zinc-700/30 space-y-3">
+        {order.tracking_number && (
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-zinc-500">Tracking Number</span>
+            <span className="font-mono text-blue-400 font-bold">{order.tracking_number}</span>
           </div>
-        ))}
-        {order.order_items.length > 3 && (
-          <div className="w-10 h-10 rounded-lg bg-zinc-800 border-2 border-black flex items-center justify-center text-[10px] text-zinc-400">
-            +{order.order_items.length - 3}
+        )}
+        {order.delivered_at && order.status === 'delivered' && (
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-zinc-500">Delivered On</span>
+            <span className="text-green-500 font-medium">{new Date(order.delivered_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', hour:'2-digit', minute:'2-digit' })}</span>
           </div>
         )}
       </div>
-      <button className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1 font-medium transition-all group-hover:translate-x-1">
-        View Details <ChevronRight className="w-4 h-4" />
+    )}
+
+    <div className="border-t border-zinc-800/50 pt-4 flex items-center justify-between">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+        {order.items?.map((item, i) => (
+          <div key={i} className="flex-shrink-0 w-12 h-12 rounded-lg bg-zinc-800 border border-zinc-700 overflow-hidden flex items-center justify-center p-1">
+            <img src={item.product_image} alt="" className="w-full h-full object-contain" />
+          </div>
+        ))}
+      </div>
+      <button className="text-xs text-zinc-400 hover:text-white flex items-center gap-1 font-bold uppercase tracking-wider transition-all">
+        Details <ChevronRight className="w-4 h-4" />
       </button>
     </div>
   </div>

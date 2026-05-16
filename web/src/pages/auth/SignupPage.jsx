@@ -12,6 +12,7 @@ const SignupPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
   const navigate = useNavigate();
@@ -21,9 +22,12 @@ const SignupPage = () => {
     setLoading(true);
 
     try {
-      const { error } = await signUp(email, password, { full_name: fullName });
+      const { error } = await signUp(email, password, {
+        full_name: fullName,
+        phone_number: phone
+      });
       if (error) throw error;
-      
+
       toast.success('Account created! Please check your email for verification.');
       navigate('/login');
     } catch (error) {
@@ -34,109 +38,114 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      {/* Background Glow */}
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
-
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+    <div className="min-h-screen bg-[#f5f5f7] flex items-center justify-center p-4 font-sans">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full max-w-[440px] bg-white rounded-[32px] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-gray-100"
       >
-        <div className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8 shadow-2xl">
-          <div className="text-center mb-10">
-            <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-600 to-pink-600 mb-6 shadow-lg shadow-purple-500/20"
-            >
-              <UserPlus className="w-8 h-8 text-white" />
-            </motion.div>
-            <h1 className="text-3xl font-bold text-white tracking-tight">Join Cipher</h1>
-            <p className="text-zinc-400 mt-2">Create an account to start your journey</p>
+        <div className="flex flex-col items-center text-center">
+          {/* Humorous Lock Icon */}
+          <div className="w-16 h-16 rounded-full bg-[#fffbeb] flex items-center justify-center mb-6">
+            <div className="w-10 h-10 rounded-full bg-[#fef3c7] flex items-center justify-center">
+              <Lock className="w-5 h-5 text-[#f59e0b] fill-[#f59e0b]" />
+            </div>
           </div>
 
-          <form onSubmit={handleSignup} className="space-y-5">
-            <div className="space-y-2">
-              <Label htmlFor="fullName" className="text-zinc-300 ml-1">Full Name</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-3 h-5 w-5 text-zinc-500" />
-                <Input
-                  id="fullName"
+          <h1 className="text-[32px] font-semibold text-[#1d1d1f] tracking-tight mb-3">
+            Create Your Cipher Account
+          </h1>
+
+          <div className="space-y-1 mb-8">
+            <p className="text-[17px] text-[#6e6e73] leading-tight px-4">
+              Don't reuse your bank password, we didn't spend a lot on security for this app.
+            </p>
+            <p className="text-[14px] text-[#86868b]">
+              At least 6 characters
+            </p>
+          </div>
+
+          <form onSubmit={handleSignup} className="w-full space-y-4">
+            {/* Full Name and Email included for functional signup, but styled minimally */}
+            <div className="space-y-2 text-left">
+              <div className="relative group">
+                <User className="absolute left-4 top-3.5 h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                <input
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Your full name"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
-                  className="bg-zinc-800/50 border-zinc-700 text-white pl-10 h-12 rounded-xl focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                  className="w-full bg-[#f5f5f7] border-none text-[#1d1d1f] pl-12 pr-4 h-[52px] rounded-2xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-zinc-300 ml-1">Email Address</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-5 w-5 text-zinc-500" />
-                <Input
-                  id="email"
+            <div className="space-y-2 text-left">
+              <div className="relative group">
+                <svg className="absolute left-4 top-3.5 h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.79 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.27-2.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                  className="w-full bg-[#f5f5f7] border-none text-[#1d1d1f] pl-12 pr-4 h-[52px] rounded-2xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2 text-left">
+              <div className="relative group">
+                <Mail className="absolute left-4 top-3.5 h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                <input
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-zinc-800/50 border-zinc-700 text-white pl-10 h-12 rounded-xl focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                  className="w-full bg-[#f5f5f7] border-none text-[#1d1d1f] pl-12 pr-4 h-[52px] rounded-2xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-zinc-300 ml-1">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-5 w-5 text-zinc-500" />
-                <Input
-                  id="password"
+            <div className="space-y-2 text-left">
+              <div className="relative group">
+                <Lock className="absolute left-4 top-3.5 h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                <input
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="bg-zinc-800/50 border-zinc-700 text-white pl-10 h-12 rounded-xl focus:ring-purple-500/20 focus:border-purple-500 transition-all"
+                  minLength={6}
+                  className="w-full bg-[#f5f5f7] border-none text-[#1d1d1f] pl-12 pr-12 h-[52px] rounded-2xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400 font-mono"
                 />
+                <button type="button" className="absolute right-4 top-3.5 text-gray-400 hover:text-gray-600 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
+                </button>
               </div>
-              <p className="text-[10px] text-zinc-500 ml-1">Must be at least 8 characters with numbers and symbols.</p>
             </div>
 
-            <Button 
-              type="submit" 
-              className="w-full h-12 bg-white hover:bg-zinc-200 text-black font-bold rounded-xl transition-all flex items-center justify-center gap-2 group mt-2"
+            <button
+              type="submit"
+              className="w-full h-[52px] bg-[#1d1d1f] hover:bg-black text-white font-semibold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 mt-4 active:scale-[0.98]"
               disabled={loading}
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
-                <>
-                  Create Account
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </>
+                "Continue"
               )}
-            </Button>
+            </button>
           </form>
 
-          <div className="mt-8 text-center text-zinc-400">
+          <div className="mt-8 text-center text-[#6e6e73] text-[14px]">
             Already have an account?{' '}
-            <Link to="/login" className="text-white font-semibold hover:text-purple-400 transition-colors">
-              Sign in here
+            <Link to="/login" className="text-[#0071e3] hover:underline font-medium">
+              Sign in
             </Link>
           </div>
-        </div>
-
-        <div className="mt-8 text-center">
-          <p className="text-zinc-600 text-xs px-8">
-            By creating an account, you agree to our{' '}
-            <Link to="/terms" className="underline hover:text-zinc-400">Terms of Service</Link> and{' '}
-            <Link to="/privacy" className="underline hover:text-zinc-400">Privacy Policy</Link>.
-          </p>
         </div>
       </motion.div>
     </div>

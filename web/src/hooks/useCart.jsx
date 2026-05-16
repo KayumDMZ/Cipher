@@ -19,7 +19,6 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
     try {
       const storedCart = localStorage.getItem(CART_STORAGE_KEY);
-
       return storedCart ? JSON.parse(storedCart) : [];
     } catch (error) {
       return [];
@@ -29,9 +28,9 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
     
-    // Sync with Supabase if user is logged in
+    // Sync with Firebase if user is logged in
     if (user) {
-      syncCart(user.id, cartItems);
+      syncCart(user.uid, cartItems);
     }
   }, [cartItems, user]);
 

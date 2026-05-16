@@ -1,127 +1,145 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from '../supabaseClient';
+import { 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  signOut as firebaseSignOut, 
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  updatePassword as firebaseUpdatePassword
+} from 'firebase/auth';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { auth, db } from '../firebaseConfig';
 
 const AuthContext = createContext();
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  return useContext(AuthContext);
 };
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProfile = async (userId) => {
+    try {
+      const docRef = doc(db, 'profiles', userId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setProfile(docSnap.data());
+      } else {
+        console.log('AuthContext: Profile not found for user.');
+        setProfile(null);
+      }
+    } catch (error) {
+      console.error('AuthContext: Error fetching profile:', error.message);
+    }
+  };
 
   useEffect(() => {
-    // Check active sessions and sets the user
-    const getInitialSession = async () => {
-      console.log('AuthContext: Getting initial session...');
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        console.log('AuthContext: Session retrieved:', session ? 'User logged in' : 'No session');
-        setSession(session);
-        setUser(session?.user ?? null);
-        if (session?.user) {
-          await fetchProfile(session.user.id);
-        }
-      } catch (err) {
-        console.error('AuthContext: Error getting session:', err);
-      } finally {
-        setLoading(false);
-        console.log('AuthContext: Loading set to false');
-      }
-    };
-
-    getInitialSession();
-
-    // Listen for changes on auth state (logged in, signed out, etc.)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        await fetchProfile(session.user.id);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        await fetchProfile(currentUser.uid);
       } else {
         setProfile(null);
       }
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return unsubscribe;
   }, []);
 
-  const fetchProfile = async (userId) => {
+  const signUp = async (email, password, metadata) => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (error) {
-        if (error.code === 'PGRST116') {
-          // Profile doesn't exist yet, we'll create it during signup or first login
-          console.log('Profile not found for user');
-        } else {
-          throw error;
-        }
-      } else {
-        setProfile(data);
-      }
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const newUser = userCredential.user;
+      
+      // Create profile in Firestore
+      const profileData = {
+        id: newUser.uid,
+        email: newUser.email,
+        full_name: metadata.full_name || '',
+        phone_number: metadata.phone_number || '',
+        role: metadata.role || 'customer',
+        created_at: new Date().toISOString(),
+      };
+      
+      await setDoc(doc(db, 'profiles', newUser.uid), profileData);
+      setProfile(profileData);
+      
+      return { user: newUser, error: null };
     } catch (error) {
-      console.error('Error fetching profile:', error.message);
+      return { user: null, error };
     }
   };
 
-  const signUp = (email, password, metadata) => {
-    return supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: metadata
+  const signIn = async (email, password) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      return { user: userCredential.user, error: null };
+    } catch (error) {
+      return { user: null, error };
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      await firebaseSignOut(auth);
+      return { error: null };
+    } catch (error) {
+      return { error };
+    }
+  };
+
+  const resetPassword = async (email) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      return { error: null };
+    } catch (error) {
+      return { error };
+    }
+  };
+
+  const updatePassword = async (newPassword) => {
+    try {
+      if (auth.currentUser) {
+        await firebaseUpdatePassword(auth.currentUser, newPassword);
+        return { error: null };
       }
-    });
-  };
-
-  const signIn = (email, password) => {
-    return supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-  };
-
-  const signOut = () => {
-    return supabase.auth.signOut();
+      throw new Error('No user logged in');
+    } catch (error) {
+      return { error };
+    }
   };
 
   const updateProfile = async (updates) => {
-    if (!user) return;
-    const { error } = await supabase
-      .from('profiles')
-      .upsert({
-        id: user.id,
-        ...updates,
-        updated_at: new Date()
-      });
-    if (!error) {
+    try {
+      if (!user) throw new Error('No user logged in');
+      const docRef = doc(db, 'profiles', user.uid);
+      await updateDoc(docRef, updates);
       setProfile(prev => ({ ...prev, ...updates }));
+      return { error: null };
+    } catch (error) {
+      return { error };
     }
-    return { error };
   };
+
+  const isAdmin = profile?.role === 'admin';
 
   const value = {
     signUp,
     signIn,
     signOut,
+    resetPassword,
+    updatePassword,
     user,
-    session,
     profile,
     loading,
-    updateProfile
+    updateProfile,
+    isAuthenticated: !!user,
+    isAdmin,
   };
 
   return (

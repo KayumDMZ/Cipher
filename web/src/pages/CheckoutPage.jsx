@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -55,29 +55,34 @@ function ShippingStep({ data, onChange, onNext }) {
 
   const validate = () => {
     const e = {};
-    if (!data.firstName.trim()) e.firstName = true;
-    if (!data.lastName.trim()) e.lastName = true;
-    if (!data.email.trim() || !/\S+@\S+\.\S+/.test(data.email)) e.email = true;
-    if (!data.address.trim()) e.address = true;
-    if (!data.city.trim()) e.city = true;
-    if (!data.state.trim()) e.state = true;
-    if (!data.zip.trim()) e.zip = true;
-    if (!data.country.trim()) e.country = true;
+    if (!data.firstName?.trim()) e.firstName = true;
+    if (!data.lastName?.trim()) e.lastName = true;
+    if (!data.email?.trim() || !/\S+@\S+\.\S+/.test(data.email)) e.email = true;
+    if (!data.address?.trim()) e.address = true;
+    if (!data.city?.trim()) e.city = true;
+    if (!data.state?.trim()) e.state = true;
+    if (!data.zip?.trim()) e.zip = true;
     setErrors(e);
+    if (Object.keys(e).length > 0) {
+      console.log('ShippingStep: Validation failed:', e);
+      toast.error('Please fill in all required fields correctly.');
+    }
     return Object.keys(e).length === 0;
   };
 
-  const field = (name, label, placeholder, type = 'text', half = false) => (
+  const field = (name, label, placeholder, type = 'text', half = false, auto = 'off') => (
     <div className={half ? 'flex-1' : 'w-full'}>
-      <label className={labelClass}>{label}</label>
+      <label htmlFor={name} className={labelClass}>{label}</label>
       <input
+        id={name}
         type={type}
-        value={data[name]}
+        autoComplete={auto}
+        value={data[name] || ''}
         onChange={e => onChange(name, e.target.value)}
         placeholder={placeholder}
-        className={`${inputClass} ${errors[name] ? 'border-red-500/60' : ''}`}
+        className={`${inputClass} ${errors[name] ? 'border-red-500/60 ring-1 ring-red-500/20' : ''}`}
       />
-      {errors[name] && <p className="text-red-400 text-xs mt-1">Required</p>}
+      {errors[name] && <p className="text-red-400 text-[10px] mt-1 font-medium">This field is required</p>}
     </div>
   );
 
@@ -90,42 +95,63 @@ function ShippingStep({ data, onChange, onNext }) {
 
       <div className="space-y-4">
         <div className="flex gap-4">
-          {field('firstName', 'First Name', 'John', 'text', true)}
-          {field('lastName', 'Last Name', 'Doe', 'text', true)}
+          {field('firstName', 'First Name', '', 'text', true)}
+          {field('lastName', 'Last Name', '', 'text', true)}
         </div>
-        {field('email', 'Email Address', 'john@example.com', 'email')}
-        {field('phone', 'Phone Number', '+1 (555) 000-0000', 'tel')}
-        {field('address', 'Street Address', '123 Main St', 'text')}
-        {field('address2', 'Apt, Suite, Unit (optional)', 'Apt 4B')}
+        {field('email', 'Email Address', '', 'email')}
+        {field('phone', 'Phone Number', '', 'tel')}
+        {field('address', 'Street Address', '', 'text')}
+        {field('address2', 'Apt, Suite, Unit (optional)', '')}
         <div className="flex gap-4">
-          {field('city', 'City', 'New York', 'text', true)}
-          {field('state', 'State / Province', 'NY', 'text', true)}
+          {field('city', 'City', '', 'text', true)}
+          {field('state', 'State / Province', '', 'text', true)}
         </div>
         <div className="flex gap-4">
-          {field('zip', 'ZIP / Postal Code', '10001', 'text', true)}
           <div className="flex-1">
-            <label className={labelClass}>Country</label>
+            <label className={labelClass}>Division</label>
             <select
-              value={data.country}
-              onChange={e => onChange('country', e.target.value)}
-              className={`${inputClass} ${errors.country ? 'border-red-500/60' : ''}`}
-              style={{ appearance: 'none' }}
+              id="division-select"
+              value={data.state || ''}
+              onChange={e => onChange('state', e.target.value)}
+              className={`${inputClass} ${errors.state ? 'border-red-500/60' : ''}`}
+              style={{ appearance: 'none', background: '#1a1a2e' }}
             >
-              <option value="" style={{ background: '#1a1a2e' }}>Select country</option>
-              {['United States', 'Canada', 'United Kingdom', 'Australia', 'Germany', 'France', 'Japan', 'India', 'Singapore', 'UAE'].map(c => (
-                <option key={c} value={c} style={{ background: '#1a1a2e' }}>{c}</option>
+              <option value="">Select Division</option>
+              {['Dhaka', 'Chattogram', 'Rajshahi', 'Khulna', 'Barishal', 'Sylhet', 'Rangpur', 'Mymensingh'].map(d => (
+                <option key={d} value={d}>{d}</option>
               ))}
             </select>
           </div>
+          <div className="flex-1">
+            <label htmlFor="zip" className={labelClass}>ZIP / Postal Code</label>
+            <input
+              id="zip"
+              type="text"
+              inputMode="numeric"
+              value={data.zip || ''}
+              onChange={e => onChange('zip', e.target.value.replace(/\D/g, '').slice(0, 5))}
+              placeholder=""
+              className={`${inputClass} ${errors.zip ? 'border-red-500/60' : ''}`}
+            />
+          </div>
+        </div>
+        <div className="flex-1">
+          <label className={labelClass}>Country</label>
+          <input
+            type="text"
+            value="Bangladesh"
+            disabled
+            className={`${inputClass} opacity-60 bg-white/10`}
+          />
         </div>
       </div>
 
       <div className="mt-4 p-4 rounded-xl border border-white/8 bg-white/3">
         <p className="text-white/40 text-xs font-medium mb-2 uppercase tracking-wider">Shipping Method</p>
         {[
-          { id: 'standard', label: 'Standard Shipping', sub: '5–7 business days', price: 'Free' },
-          { id: 'express', label: 'Express Shipping', sub: '2–3 business days', price: '৳1,100' },
-          { id: 'overnight', label: 'Overnight Shipping', sub: 'Next business day', price: '৳2,750' },
+          { id: 'standard', label: 'Inside Dhaka', sub: '2–3 business days', price: '৳60' },
+          { id: 'express', label: 'Outside Dhaka', sub: '3–5 business days', price: '৳120' },
+          { id: 'overnight', label: 'Express Delivery', sub: 'Next business day', price: '৳200' },
         ].map(opt => (
           <label key={opt.id} className="flex items-center gap-3 py-2.5 cursor-pointer group">
             <input
@@ -146,8 +172,9 @@ function ShippingStep({ data, onChange, onNext }) {
       </div>
 
       <button
+        id="continue-to-payment"
         onClick={() => { if (validate()) onNext(); }}
-        className="mt-6 w-full py-3.5 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold text-sm hover:from-violet-500 hover:to-purple-500 transition-all duration-200 flex items-center justify-center gap-2"
+        className="mt-6 w-full py-3.5 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold text-sm hover:from-violet-500 hover:to-purple-500 transition-all duration-200 flex items-center justify-center gap-2 active:scale-[0.98]"
       >
         Continue to Payment <ChevronRight className="w-4 h-4" />
       </button>
@@ -155,8 +182,10 @@ function ShippingStep({ data, onChange, onNext }) {
   );
 }
 
-function PaymentStep({ data, onChange, onNext, onBack }) {
+function PaymentStep({ data, onChange, onNext, onBack, totalAmount }) {
   const [errors, setErrors] = useState({});
+  // method: 'card', 'bkash', 'nagad', 'cod', 'emi'
+  const method = data.paymentMethod || 'card';
 
   const formatCard = (val) => val.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim().slice(0, 19);
   const formatExpiry = (val) => {
@@ -165,83 +194,173 @@ function PaymentStep({ data, onChange, onNext, onBack }) {
   };
 
   const validate = () => {
+    if (['bkash', 'nagad', 'cod'].includes(method)) return true;
     const e = {};
-    if (!data.cardName.trim()) e.cardName = true;
-    if (data.cardNumber.replace(/\s/g, '').length < 16) e.cardNumber = true;
-    if (!data.expiry || data.expiry.length < 5) e.expiry = true;
-    if (!data.cvv || data.cvv.length < 3) e.cvv = true;
+    if (method === 'card') {
+      if (!data.cardName?.trim()) e.cardName = true;
+      if ((data.cardNumber || '').replace(/\s/g, '').length < 16) e.cardNumber = true;
+      if (!data.expiry || data.expiry.length < 5) e.expiry = true;
+      if (!data.cvv || data.cvv.length < 3) e.cvv = true;
+    }
+    if (method === 'emi') {
+      if (!data.emiTenure) e.emiTenure = true;
+      if (!data.emiBank) e.emiBank = true;
+    }
     setErrors(e);
     return Object.keys(e).length === 0;
   };
 
-  const cardType = () => {
-    const n = data.cardNumber.replace(/\s/g, '');
-    if (n.startsWith('4')) return 'VISA';
-    if (n.startsWith('5')) return 'MC';
-    if (n.startsWith('3')) return 'AMEX';
-    return null;
-  };
+  const emiEligible = totalAmount >= 500000; // 5k BDT threshold
 
   return (
     <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.3 }}>
       <div className="flex items-center gap-2 mb-6">
         <CreditCard className="w-5 h-5 text-violet-400" />
-        <h2 className="text-white font-semibold text-lg">Payment Details</h2>
-        <div className="ml-auto flex items-center gap-1 text-white/30 text-xs">
-          <Lock className="w-3 h-3" /> SSL Secured
-        </div>
+        <h2 className="text-white font-semibold text-lg">Payment Method</h2>
       </div>
 
-      {/* Card visual */}
-      <div className="relative h-44 rounded-2xl bg-gradient-to-br from-violet-700 via-purple-700 to-indigo-800 p-6 mb-6 overflow-hidden shadow-xl">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 80% 20%, white 0%, transparent 60%)' }} />
-        <div className="absolute top-4 right-4 text-white/60 font-bold text-sm tracking-widest">{cardType() || '····'}</div>
-        <div className="absolute bottom-14 left-6 text-white/90 font-mono text-lg tracking-widest">
-          {data.cardNumber || '•••• •••• •••• ••••'}
-        </div>
-        <div className="absolute bottom-6 left-6 text-white/60 text-xs uppercase tracking-wider">
-          {data.cardName || 'CARDHOLDER NAME'}
-        </div>
-        <div className="absolute bottom-6 right-6 text-white/60 text-xs">
-          {data.expiry || 'MM/YY'}
-        </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
+        {[
+          { id: 'card', label: 'Card', color: 'bg-violet-600' },
+          { id: 'bkash', label: 'bKash', color: 'bg-[#D12053]' },
+          { id: 'nagad', label: 'Nagad', color: 'bg-[#F58220]' },
+          { id: 'cod', label: 'COD', color: 'bg-emerald-600' },
+          { id: 'emi', label: 'EMI', color: 'bg-indigo-600', disabled: !emiEligible },
+        ].map(m => (
+          <button
+            key={m.id}
+            disabled={m.disabled}
+            onClick={() => onChange('paymentMethod', m.id)}
+            className={`py-2.5 rounded-xl border text-[11px] font-bold uppercase tracking-tight transition-all ${
+              method === m.id 
+                ? `${m.color} border-transparent text-white shadow-lg shadow-${m.id}/20` 
+                : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/8'
+            } ${m.disabled ? 'opacity-20 cursor-not-allowed' : ''}`}
+          >
+            {m.label}
+          </button>
+        ))}
       </div>
 
-      <div className="space-y-4">
-        <div>
-          <label className={labelClass}>Name on Card</label>
-          <input value={data.cardName} onChange={e => onChange('cardName', e.target.value)} placeholder="John Doe"
-            className={`${inputClass} ${errors.cardName ? 'border-red-500/60' : ''}`} />
-          {errors.cardName && <p className="text-red-400 text-xs mt-1">Required</p>}
-        </div>
-        <div>
-          <label className={labelClass}>Card Number</label>
-          <input value={data.cardNumber} onChange={e => onChange('cardNumber', formatCard(e.target.value))}
-            placeholder="1234 5678 9012 3456" maxLength={19}
-            className={`${inputClass} font-mono ${errors.cardNumber ? 'border-red-500/60' : ''}`} />
-          {errors.cardNumber && <p className="text-red-400 text-xs mt-1">Enter valid 16-digit card number</p>}
-        </div>
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <label className={labelClass}>Expiry Date</label>
-            <input value={data.expiry} onChange={e => onChange('expiry', formatExpiry(e.target.value))}
-              placeholder="MM/YY" maxLength={5}
-              className={`${inputClass} ${errors.expiry ? 'border-red-500/60' : ''}`} />
-            {errors.expiry && <p className="text-red-400 text-xs mt-1">Required</p>}
+      {method === 'card' && (
+        <div className="space-y-6">
+          <div className="relative h-44 rounded-2xl bg-gradient-to-br from-violet-700 via-purple-700 to-indigo-800 p-6 overflow-hidden shadow-xl">
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 80% 20%, white 0%, transparent 60%)' }} />
+            <div className="absolute top-4 right-4 text-white/60 font-bold text-sm tracking-widest">VISA</div>
+            <div className="absolute bottom-14 left-6 text-white/90 font-mono text-lg tracking-widest">
+              {data.cardNumber || '•••• •••• •••• ••••'}
+            </div>
+            <div className="absolute bottom-6 left-6 text-white/60 text-xs uppercase tracking-wider">
+              {data.cardName || 'CARDHOLDER NAME'}
+            </div>
+            <div className="absolute bottom-6 right-6 text-white/60 text-xs">
+              {data.expiry || 'MM/YY'}
+            </div>
           </div>
-          <div className="flex-1">
-            <label className={labelClass}>CVV</label>
-            <input value={data.cvv} onChange={e => onChange('cvv', e.target.value.replace(/\D/g, '').slice(0, 4))}
-              placeholder="•••" maxLength={4} type="password"
-              className={`${inputClass} ${errors.cvv ? 'border-red-500/60' : ''}`} />
-            {errors.cvv && <p className="text-red-400 text-xs mt-1">Required</p>}
+
+          <div className="space-y-4">
+            <div>
+              <label className={labelClass}>Name on Card</label>
+              <input value={data.cardName || ''} onChange={e => onChange('cardName', e.target.value)} placeholder=""
+                className={`${inputClass} ${errors.cardName ? 'border-red-500/60' : ''}`} />
+            </div>
+            <div>
+              <label className={labelClass}>Card Number</label>
+              <input value={data.cardNumber || ''} onChange={e => onChange('cardNumber', formatCard(e.target.value))}
+                placeholder="•••• •••• •••• ••••" maxLength={19}
+                className={`${inputClass} font-mono ${errors.cardNumber ? 'border-red-500/60' : ''}`} />
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className={labelClass}>Expiry Date</label>
+                <input value={data.expiry || ''} onChange={e => onChange('expiry', formatExpiry(e.target.value))}
+                  placeholder="" maxLength={5}
+                  className={`${inputClass} ${errors.expiry ? 'border-red-500/60' : ''}`} />
+              </div>
+              <div className="flex-1">
+                <label className={labelClass}>CVV</label>
+                <input value={data.cvv || ''} onChange={e => onChange('cvv', e.target.value.replace(/\D/g, '').slice(0, 4))}
+                  placeholder="•••" maxLength={4} type="password"
+                  className={`${inputClass} ${errors.cvv ? 'border-red-500/60' : ''}`} />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <div className="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-2">
-        <Lock className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-        <p className="text-emerald-300/80 text-xs">Your payment information is encrypted and never stored on our servers.</p>
+      {(method === 'bkash' || method === 'nagad') && (
+        <div className="space-y-6">
+          <div className="flex justify-center py-4">
+            <div className={`w-20 h-20 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-2xl ${method === 'bkash' ? 'bg-[#D12053]' : 'bg-[#F58220]'}`}>
+              {method === 'bkash' ? 'b' : 'n'}
+            </div>
+          </div>
+          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 text-center">
+            <p className="text-white font-medium mb-2">Pay with {method === 'bkash' ? 'bKash' : 'Nagad'}</p>
+            <p className="text-white/40 text-xs leading-relaxed">
+              You will be redirected to the secure {method} gateway to authorize the payment.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {method === 'cod' && (
+        <div className="space-y-6 py-4">
+          <div className="p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 text-center">
+            <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
+              <ShoppingBag className="w-8 h-8 text-emerald-400" />
+            </div>
+            <p className="text-white font-semibold text-lg mb-2">Cash on Delivery</p>
+            <p className="text-white/40 text-sm leading-relaxed px-4">
+              Pay with cash when your order arrives at your doorstep. Please have the exact amount ready.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {method === 'emi' && (
+        <div className="space-y-4">
+          <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+            <p className="text-indigo-300 text-xs font-medium uppercase tracking-wider mb-3">Select EMI Tenure</p>
+            <div className="grid grid-cols-2 gap-2">
+              {[3, 6, 9, 12].map(months => (
+                <button
+                  key={months}
+                  onClick={() => onChange('emiTenure', `${months} Months`)}
+                  className={`py-3 rounded-xl border text-sm font-semibold transition-all ${
+                    data.emiTenure === `${months} Months` 
+                      ? 'bg-indigo-600 border-indigo-500 text-white' 
+                      : 'bg-white/5 border-white/10 text-white/40'
+                  }`}
+                >
+                  {months} Months
+                </button>
+              ))}
+            </div>
+            {errors.emiTenure && <p className="text-red-400 text-[10px] mt-2">Please select tenure</p>}
+          </div>
+          <div>
+            <label className={labelClass}>Bank Name</label>
+            <select
+              value={data.emiBank || ''}
+              onChange={e => onChange('emiBank', e.target.value)}
+              className={`${inputClass} ${errors.emiBank ? 'border-red-500/60' : ''}`}
+              style={{ appearance: 'none' }}
+            >
+              <option value="" style={{ background: '#1a1a2e' }}>Select Bank</option>
+              {['City Bank', 'EBL', 'SCB', 'Brac Bank', 'HSBC', 'Dutch Bangla Bank'].map(b => (
+                <option key={b} value={b} style={{ background: '#1a1a2e' }}>{b}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
+
+      <div className="mt-4 p-3 rounded-xl bg-white/3 border border-white/8 flex items-center gap-2">
+        <Lock className="w-4 h-4 text-white/30 flex-shrink-0" />
+        <p className="text-white/30 text-[10px] leading-tight">
+          Your transaction is encrypted. Cipher does not store card numbers or mobile pins.
+        </p>
       </div>
 
       <div className="flex gap-3 mt-6">
@@ -307,9 +426,23 @@ function ReviewStep({ shipping, payment, onBack, onPlace, placing }) {
         </div>
         <div className="p-4 rounded-xl bg-white/4 border border-white/8">
           <p className="text-white/40 text-xs uppercase tracking-wider mb-2">Payment</p>
-          <p className="text-white/80 text-sm font-medium">{payment.cardName}</p>
-          <p className="text-white/50 text-xs mt-1">{masked}</p>
-          <p className="text-white/50 text-xs">Expires {payment.expiry}</p>
+          {payment.paymentMethod === 'card' && (
+            <>
+              <p className="text-white/80 text-sm font-medium">{payment.cardName}</p>
+              <p className="text-white/50 text-xs mt-1">{masked}</p>
+              <p className="text-white/50 text-xs">Expires {payment.expiry}</p>
+            </>
+          )}
+          {payment.paymentMethod === 'emi' && (
+            <>
+              <p className="text-white/80 text-sm font-medium">EMI - {payment.emiBank}</p>
+              <p className="text-white/50 text-xs mt-1">Tenure: {payment.emiTenure}</p>
+              <p className="text-white/50 text-xs italic">Approval required</p>
+            </>
+          )}
+          {payment.paymentMethod === 'bkash' && <p className="text-white/80 text-sm font-medium">bKash Mobile Wallet</p>}
+          {payment.paymentMethod === 'nagad' && <p className="text-white/80 text-sm font-medium">Nagad Mobile Wallet</p>}
+          {payment.paymentMethod === 'cod' && <p className="text-white/80 text-sm font-medium">Cash on Delivery</p>}
         </div>
       </div>
 
@@ -351,10 +484,14 @@ function ReviewStep({ shipping, payment, onBack, onPlace, placing }) {
 
 const defaultShipping = {
   firstName: '', lastName: '', email: '', phone: '',
-  address: '', address2: '', city: '', state: '', zip: '', country: '',
+  address: '', address2: '', city: '', state: '', zip: '', country: 'Bangladesh',
   shippingMethod: 'standard',
 };
-const defaultPayment = { cardName: '', cardNumber: '', expiry: '', cvv: '' };
+const defaultPayment = { 
+  paymentMethod: 'card', 
+  cardName: '', cardNumber: '', expiry: '', cvv: '',
+  emiBank: '', emiTenure: '' 
+};
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -375,6 +512,23 @@ export default function CheckoutPage() {
   const [payment, setPayment] = useState(defaultPayment);
   const [placing, setPlacing] = useState(false);
 
+  // Sync profile when it loads
+  useEffect(() => {
+    if (profile) {
+      setShipping(prev => ({
+        ...prev,
+        firstName: prev.firstName || profile.full_name?.split(' ')[0] || '',
+        lastName: prev.lastName || profile.full_name?.split(' ').slice(1).join(' ') || '',
+        email: prev.email || user?.email || '',
+        address: prev.address || profile.address || '',
+        city: prev.city || profile.city || '',
+        state: prev.state || profile.state || '',
+        zip: prev.zip || profile.zip_code || '',
+        country: prev.country || profile.country || 'Bangladesh',
+      }));
+    }
+  }, [profile, user]);
+
   const patchShipping = (k, v) => setShipping(s => ({ ...s, [k]: v }));
   const patchPayment = (k, v) => setPayment(p => ({ ...p, [k]: v }));
 
@@ -386,18 +540,28 @@ export default function CheckoutPage() {
         const p = item.variant.sale_price_in_cents ?? item.variant.price_in_cents;
         return t + p * item.quantity;
       }, 0);
-      const shippingCost = (shipping.shippingMethod === 'express' ? 1100 : shipping.shippingMethod === 'overnight' ? 2750 : 0) * 100;
-      const tax = Math.round(subtotalRaw * 0.08);
+      const shippingCost = (shipping.shippingMethod === 'standard' ? 60 : shipping.shippingMethod === 'express' ? 120 : 200) * 100;
+      const tax = Math.round(subtotalRaw * 0.05); // 5% VAT in BD commonly
       const totalAmount = subtotalRaw + shippingCost + tax;
 
       const shippingAddress = `${shipping.address}, ${shipping.city}, ${shipping.state} ${shipping.zip}, ${shipping.country}`;
 
       if (user) {
         const { success, orderId, error } = await createOrder(
-          user.id,
+          user.uid,
           cartItems,
           totalAmount,
-          shippingAddress
+          shippingAddress,
+          {
+            method: payment.paymentMethod,
+            info: payment.paymentMethod === 'card' ? { last4: payment.cardNumber.slice(-4) } :
+                  payment.paymentMethod === 'emi' ? { bank: payment.emiBank, tenure: payment.emiTenure } : {}
+          },
+          {
+            name: `${shipping.firstName} ${shipping.lastName}`,
+            email: shipping.email,
+            phone: shipping.phone
+          }
         );
 
         if (!success) throw error;
@@ -461,13 +625,20 @@ export default function CheckoutPage() {
             <div className="glass rounded-3xl p-8 border border-white/10">
               <AnimatePresence mode="wait">
                 {step === 0 && (
-                  <ShippingStep key="shipping" data={shipping} onChange={patchShipping} onNext={() => setStep(1)} />
+                  <ShippingStep key="step-shipping" data={shipping} onChange={patchShipping} onNext={() => setStep(1)} />
                 )}
                 {step === 1 && (
-                  <PaymentStep key="payment" data={payment} onChange={patchPayment} onNext={() => setStep(2)} onBack={() => setStep(0)} />
+                  <PaymentStep 
+                    key="step-payment" 
+                    data={payment} 
+                    onChange={patchPayment} 
+                    onNext={() => setStep(2)} 
+                    onBack={() => setStep(0)} 
+                    totalAmount={cartItems.reduce((t, item) => t + (item.variant.sale_price_in_cents ?? item.variant.price_in_cents) * item.quantity, 0)}
+                  />
                 )}
                 {step === 2 && (
-                  <ReviewStep key="review" shipping={shipping} payment={payment} onBack={() => setStep(1)} onPlace={placeOrder} placing={placing} />
+                  <ReviewStep key="step-review" shipping={shipping} payment={payment} onBack={() => setStep(1)} onPlace={placeOrder} placing={placing} />
                 )}
               </AnimatePresence>
             </div>

@@ -199,6 +199,27 @@
     text-decoration: underline;
   }
 
+  /* ===== SKELETON SHIMMER ===== */
+  @keyframes shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position: 600px 0; }
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
+    background-size: 1200px 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+    border-radius: 12px;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   /* ===== PRODUCT CARDS ===== */
   .apple-card {
     background-color: hsl(var(--card));
@@ -268,5 +289,32 @@
     outline: 2px solid hsl(var(--apple-blue));
     outline-offset: 2px;
     border-radius: 4px;
+  }
+
+  /* ===== CHECKOUT UTILITIES ===== */
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .grid-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+    background-size: 40px 40px;
+  }
+
+  .orb {
+    filter: blur(80px);
+    border-radius: 9999px;
+    z-index: 0;
+  }
+
+  .orb-blue {
+    background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+  }
+
+  .orb-purple {
+    background: radial-gradient(circle, #8b5cf6 0%, transparent 70%);
   }
 }

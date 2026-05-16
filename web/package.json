@@ -5,8 +5,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite --host :: --port 3000",
-		"build": "node tools/generate-llms.js || true && vite build --outDir ../../dist/apps/web",
-		"start": "vite preview --outDir ../../dist/apps/web --host :: --port 3000",
+		"build": "vite build",
+		"start": "vite preview --host :: --port 3000",
 		"lint": "eslint . --quiet",
 		"lint:warn": "eslint ."
 	},
@@ -46,6 +46,7 @@
 		"date-fns": "^4.1.0",
 		"dotenv": "^17.4.2",
 		"embla-carousel-react": "^8.6.0",
+		"firebase": "^12.13.0",
 		"framer-motion": "^11.15.0",
 		"input-otp": "^1.4.2",
 		"lucide-react": "^0.469.0",
@@ -65,10 +66,13 @@
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
+		"@babel/eslint-parser": "^7.28.6",
 		"@babel/generator": "^7.26.3",
 		"@babel/parser": "^7.26.3",
+		"@babel/preset-react": "^7.28.5",
 		"@babel/traverse": "^7.26.4",
 		"@babel/types": "^7.26.3",
+		"@eslint/js": "^9.39.4",
 		"@types/node": "^20.17.10",
 		"@types/react": "^18.3.18",
 		"@types/react-dom": "^18.3.5",

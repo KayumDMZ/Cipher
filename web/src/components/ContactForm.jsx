@@ -61,7 +61,7 @@ function ContactForm() {
         <Input
           id="name"
           type="text"
-          placeholder="Maya Chen"
+          placeholder=""
           className="mt-2 text-foreground placeholder:text-foreground/40"
           {...register('name')}
           aria-invalid={errors.name ? 'true' : 'false'}
@@ -76,7 +76,7 @@ function ContactForm() {
         <Input
           id="email"
           type="email"
-          placeholder="maya@example.com"
+          placeholder=""
           className="mt-2 text-foreground placeholder:text-foreground/40"
           {...register('email')}
           aria-invalid={errors.email ? 'true' : 'false'}
@@ -91,7 +91,7 @@ function ContactForm() {
         <Input
           id="subject"
           type="text"
-          placeholder="Product inquiry"
+          placeholder=""
           className="mt-2 text-foreground placeholder:text-foreground/40"
           {...register('subject')}
           aria-invalid={errors.subject ? 'true' : 'false'}

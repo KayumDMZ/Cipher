@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "vexa-ccn"
+  },
+  "targets": {
+    "vexa-ccn": {
+      "hosting": {
+        "main": [
+          "vexa-ccn"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

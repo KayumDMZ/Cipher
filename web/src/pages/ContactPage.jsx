@@ -19,12 +19,12 @@ function ContactPage() {
     {
       icon: <Phone className="w-6 h-6 text-primary" />,
       label: 'Phone',
-      value: '+1 (800) 275-2273',
+      value: '+880 1XXX-XXXXXX',
     },
     {
       icon: <MapPin className="w-6 h-6 text-primary" />,
       label: 'Address',
-      value: '123 Cipher Plaza, San Francisco, CA 94105',
+      value: 'Cipher Plaza, Dhaka, Bangladesh',
     },
     {
       icon: <Clock className="w-6 h-6 text-primary" />,

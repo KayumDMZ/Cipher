@@ -33,94 +33,77 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      {/* Background Glow */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
-
+    <div className="min-h-screen bg-[#f5f5f7] flex items-center justify-center p-4 font-sans">
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="w-full max-w-[440px] bg-white rounded-[32px] p-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-gray-100"
       >
-        <div className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8 shadow-2xl">
-          <div className="text-center mb-10">
-            <motion.div
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-purple-600 mb-6 shadow-lg shadow-blue-500/20"
-            >
-              <LogIn className="w-8 h-8 text-white" />
-            </motion.div>
-            <h1 className="text-3xl font-bold text-white tracking-tight">Welcome Back</h1>
-            <p className="text-zinc-400 mt-2">Enter your credentials to access your account</p>
+        <div className="flex flex-col items-center text-center">
+          <div className="w-16 h-16 rounded-full bg-[#f0f9ff] flex items-center justify-center mb-6">
+            <div className="w-10 h-10 rounded-full bg-[#e0f2fe] flex items-center justify-center text-blue-600">
+              <LogIn className="w-5 h-5" />
+            </div>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-zinc-300 ml-1">Email Address</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-5 w-5 text-zinc-500" />
-                <Input
-                  id="email"
+          <h1 className="text-[32px] font-semibold text-[#1d1d1f] tracking-tight mb-3">
+            Welcome back
+          </h1>
+          <p className="text-[17px] text-[#6e6e73] leading-tight mb-8">
+            Sign in to track your orders and manage your details.
+          </p>
+
+          <form onSubmit={handleLogin} className="w-full space-y-4">
+            <div className="space-y-2 text-left">
+              <div className="relative group">
+                <Mail className="absolute left-4 top-3.5 h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                <input
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-zinc-800/50 border-zinc-700 text-white pl-10 h-12 rounded-xl focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full bg-[#f5f5f7] border-none text-[#1d1d1f] pl-12 pr-4 h-[52px] rounded-2xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <div className="flex justify-between items-center ml-1">
-                <Label htmlFor="password" className="text-zinc-300">Password</Label>
-                <Link to="/forgot-password" size="sm" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
-                  Forgot?
-                </Link>
-              </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 h-5 w-5 text-zinc-500" />
-                <Input
-                  id="password"
+            <div className="space-y-2 text-left">
+              <div className="relative group">
+                <Lock className="absolute left-4 top-3.5 h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" />
+                <input
                   type="password"
-                  placeholder="••••••••"
+                  placeholder="Your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="bg-zinc-800/50 border-zinc-700 text-white pl-10 h-12 rounded-xl focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full bg-[#f5f5f7] border-none text-[#1d1d1f] pl-12 pr-12 h-[52px] rounded-2xl focus:ring-2 focus:ring-blue-500/20 outline-none transition-all placeholder:text-gray-400 font-mono"
                 />
+                <Link to="/forgot-password" size="sm" className="absolute right-4 top-3.5 text-xs text-[#0071e3] hover:underline font-medium">
+                  Forgot?
+                </Link>
               </div>
             </div>
 
-            <Button 
+            <button 
               type="submit" 
-              className="w-full h-12 bg-white hover:bg-zinc-200 text-black font-bold rounded-xl transition-all flex items-center justify-center gap-2 group"
+              className="w-full h-[52px] bg-[#1d1d1f] hover:bg-black text-white font-semibold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 mt-4 active:scale-[0.98]"
               disabled={loading}
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
-                <>
-                  Sign In
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </>
+                "Continue"
               )}
-            </Button>
+            </button>
           </form>
 
-          <div className="mt-8 text-center text-zinc-400">
+          <div className="mt-8 text-center text-[#6e6e73] text-[14px]">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-white font-semibold hover:text-blue-400 transition-colors">
-              Create one for free
+            <Link to="/signup" className="text-[#0071e3] hover:underline font-medium">
+              Create one
             </Link>
           </div>
-        </div>
-
-        <div className="mt-8 flex justify-center gap-6">
-          <Link to="/" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors">Back to Home</Link>
-          <Link to="/contact" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors">Help Center</Link>
         </div>
       </motion.div>
     </div>
